@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-vault = "rgGJVXV47TwooNQfVvcsfUpSh4f4DuqZAC5RNhEcExE"
+pirate_academy = "rgGJVXV47TwooNQfVvcsfUpSh4f4DuqZAC5RNhEcExE"
 
 [registry]
 url = "https://api.apr.dev"
