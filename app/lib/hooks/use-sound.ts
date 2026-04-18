@@ -18,8 +18,8 @@ export function playChime() {
       osc.start(start);
       osc.stop(start + 0.08);
     });
-  } catch {
-    // silent fail — sound is non-critical UI feedback
+  } catch (e) {
+    if (process.env.NODE_ENV === "development") console.warn("[use-sound] playChime", e);
   }
 }
 
@@ -39,7 +39,7 @@ export function playFoghorn() {
     gain.gain.linearRampToValueAtTime(0, t + 0.65);
     osc.start(t);
     osc.stop(t + 0.65);
-  } catch {
-    // silent fail — sound is non-critical UI feedback
+  } catch (e) {
+    if (process.env.NODE_ENV === "development") console.warn("[use-sound] playFoghorn", e);
   }
 }
