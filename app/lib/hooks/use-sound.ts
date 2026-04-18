@@ -13,9 +13,9 @@ export function playChime() {
     osc.frequency.value = freq;
     const start = ctx.currentTime + i * 0.09;
     gain.gain.setValueAtTime(0.25, start);
-    gain.gain.exponentialRampToValueAtTime(0.001, start + 0.18);
+    gain.gain.exponentialRampToValueAtTime(0.001, start + 0.08);
     osc.start(start);
-    osc.stop(start + 0.18);
+    osc.stop(start + 0.08);
   });
 }
 
