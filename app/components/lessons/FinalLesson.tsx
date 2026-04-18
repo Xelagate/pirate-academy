@@ -14,6 +14,7 @@ import {
   findProfilePda,
 } from "@/generated/pirate-academy";
 import { markComplete } from "@/lib/progress";
+import { playFoghorn } from "@/lib/hooks/use-sound";
 
 export function FinalLesson({ lessonId }: { lessonId: string }) {
   const router = useRouter();
@@ -62,6 +63,7 @@ export function FinalLesson({ lessonId }: { lessonId: string }) {
 
       const sig = await send({ instructions });
       markComplete(lessonId);
+      playFoghorn();
       toast.success("Badge minted! Setting sail to your trophy page…");
       router.push(`/badge?sig=${sig ?? ""}&asset=${assetSigner.address}`);
     } catch (err) {
