@@ -17,6 +17,11 @@ export interface IslandData {
   lessons: LessonEntry[];
 }
 
+export type LessonModule = {
+  meta: LessonMeta;
+  default: React.ComponentType<Record<string, never>>;
+};
+
 export const ISLANDS: Record<string, IslandData> = {
   "crab-forge": {
     title: "Crab Forge",
@@ -37,15 +42,15 @@ export const ISLANDS: Record<string, IslandData> = {
 // Static strings required by Next.js/webpack bundler — no dynamic paths allowed.
 export const lessonImporters: Record<
   string,
-  Record<string, () => Promise<{ meta: LessonMeta; default: React.ComponentType }>>
+  Record<string, () => Promise<LessonModule>>
 > = {
   "crab-forge": {
-    "01": () => import("@/content/lessons/crab-forge/01-name.mdx") as never,
-    "02": () => import("@/content/lessons/crab-forge/02-doubloons.mdx") as never,
-    "03": () => import("@/content/lessons/crab-forge/03-visibility.mdx") as never,
-    "04": () => import("@/content/lessons/crab-forge/04-crew.mdx") as never,
-    "05": () => import("@/content/lessons/crab-forge/05-methods.mdx") as never,
-    "06": () => import("@/content/lessons/crab-forge/06-account.mdx") as never,
-    "07": () => import("@/content/lessons/crab-forge/07-bumps.mdx") as never,
+    "01": () => import("@/content/lessons/crab-forge/01-name.mdx") as unknown as Promise<LessonModule>,
+    "02": () => import("@/content/lessons/crab-forge/02-doubloons.mdx") as unknown as Promise<LessonModule>,
+    "03": () => import("@/content/lessons/crab-forge/03-visibility.mdx") as unknown as Promise<LessonModule>,
+    "04": () => import("@/content/lessons/crab-forge/04-crew.mdx") as unknown as Promise<LessonModule>,
+    "05": () => import("@/content/lessons/crab-forge/05-methods.mdx") as unknown as Promise<LessonModule>,
+    "06": () => import("@/content/lessons/crab-forge/06-account.mdx") as unknown as Promise<LessonModule>,
+    "07": () => import("@/content/lessons/crab-forge/07-bumps.mdx") as unknown as Promise<LessonModule>,
   },
 };
