@@ -6,6 +6,7 @@ import { CodeExercise } from "@/components/lessons/CodeExercise";
 import { FinalLesson } from "@/components/lessons/FinalLesson";
 import { markComplete, isComplete } from "@/lib/progress";
 import type { LessonMeta } from "@/lib/lessons";
+import { ErrorBoundary, ErrorFallback } from "@/components/ErrorBoundary";
 
 interface Props {
   meta: LessonMeta;
@@ -40,13 +41,21 @@ export function LessonClient({
   return (
     <div className="flex flex-col gap-6">
       {meta.isMint ? (
-        <FinalLesson lessonId={meta.lessonId} />
+        <ErrorBoundary
+          fallback={<ErrorFallback message="Ошибка кошелька — обнови страницу" />}
+        >
+          <FinalLesson lessonId={meta.lessonId} />
+        </ErrorBoundary>
       ) : (
-        <CodeExercise
-          lessonId={meta.lessonId}
-          initialCode={meta.initialCode}
-          onPass={handlePass}
-        />
+        <ErrorBoundary
+          fallback={<ErrorFallback message="Редактор не загрузился — обнови страницу" />}
+        >
+          <CodeExercise
+            lessonId={meta.lessonId}
+            initialCode={meta.initialCode}
+            onPass={handlePass}
+          />
+        </ErrorBoundary>
       )}
 
       <div className="flex items-center justify-between border-t border-border pt-4">
