@@ -1,3 +1,5 @@
+import type React from "react";
+
 export interface LessonMeta {
   title: string;
   lessonId: string;
