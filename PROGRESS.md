@@ -48,7 +48,14 @@
 - [x] `/dev/lesson` page renders MDX + CodeExercise; `pnpm build` green
 - **Note:** `next/dynamic` with `ssr:false` requires `"use client"` in App Router; `scripts/` excluded from tsconfig to prevent pre-existing type errors from blocking build
 
-## ⬜ Days 7–8 — Crab Forge (7 lessons)
+## ✅ Days 7–8 — Crab Forge (7 lessons)
+- [x] `app/lib/lessons.ts` — island metadata + static MDX import map (`LessonModule` type, no `as never`)
+- [x] `app/lib/progress.ts` — localStorage helpers: `markComplete`, `isComplete`, `completedCount`
+- [x] MDX lessons 02–07 with pirate-themed content matching existing validators
+- [x] `LessonClient.tsx` — CodeExercise + `onPass → markComplete` + Prev/Next nav, amber CTA on last lesson
+- [x] `/island/[island]/[lesson]` — SSG lesson page: breadcrumb, progress bar, MDX prose, LessonClient
+- [x] `/island/[island]` — island index: per-lesson completion cards, overall progress bar
+- **Note:** amber (#F59E0B) accent for completed state; soft nav (Next always visible, highlighted on pass)
 ## ⬜ Days 9–10 — Anchor Harbor (5 lessons) + `/badge`
 ## ⬜ Day 11 — Landing + Map + Progress Gating ⚠️ HIGH RISK
 ## ⬜ Day 12 — Polish (sounds, error boundaries, loading)
