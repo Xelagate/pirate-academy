@@ -33,15 +33,20 @@
 - [x] `scripts/smoke.ts` prints Explorer link — confirmed on devnet
 - **Note:** mpl-core feature = `anchor`; use `getRegisterPirateInstructionAsync` (not sync); use `getSignatureFromTransaction` before `sendAndConfirm`; `@solana-program/system` for SOL transfers
 
-## ⬜ Day 5 — Wallet + Vertical Slice
-- [ ] `WalletProvider.tsx` (Phantom + Backpack + Solflare)
-- [ ] `MintBadgeButton` works on `/dev` page
-- [ ] Sign → Explorer shows asset under wallet
+## ✅ Day 5 — Wallet + Vertical Slice
+- [x] `WalletProvider.tsx` already existed from scaffold (Wallet Standard, auto-connect, Phantom/Backpack/Solflare)
+- [x] `MintBadgeButton` — register+mint in one tx if new, mint-only if profile exists; `app/components/mint-badge-button.tsx`
+- [x] `/dev` page renders `MintBadgeButton` + wallet header; 200 confirmed
+- **Note:** `useSendTransaction` collects `TransactionSigner` refs from instruction accounts automatically (no extra config needed)
 
-## ⬜ Day 6 — MDX + Monaco ⚠️ HIGH RISK
-- [ ] `@next/mdx` configured
-- [ ] `CodeExercise.tsx` (Monaco, `ssr:false`)
-- [ ] One lesson renders, Pass/Fail works
+## ✅ Day 6 — MDX + Monaco ⚠️ HIGH RISK
+- [x] `@next/mdx` + `@monaco-editor/react` installed (4.7.0 / 16.2.4)
+- [x] `next.config.ts` + `mdx-components.tsx` configured; `mdx.d.ts` types added
+- [x] `app/lib/validators/rust.ts` — regex validators for all 7 Crab Forge lessons
+- [x] `CodeExercise.tsx` — Monaco `ssr:false` via `next/dynamic`, Pass/Fail feedback
+- [x] `app/content/lessons/crab-forge/01-name.mdx` — first lesson with `meta` export
+- [x] `/dev/lesson` page renders MDX + CodeExercise; `pnpm build` green
+- **Note:** `next/dynamic` with `ssr:false` requires `"use client"` in App Router; `scripts/` excluded from tsconfig to prevent pre-existing type errors from blocking build
 
 ## ⬜ Days 7–8 — Crab Forge (7 lessons)
 ## ⬜ Days 9–10 — Anchor Harbor (5 lessons) + `/badge`

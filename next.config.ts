@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
+
+const withMDX = createMDX({ options: { remarkPlugins: [], rehypePlugins: [] } });
 
 const nextConfig: NextConfig = {
+  pageExtensions: ["ts", "tsx", "md", "mdx"],
   serverExternalPackages: ["ws"],
   // @solana/kit-plugin-payer's browser bundle has a spurious `import 'fs'`
   // from the payerFromFile export. Stub it out for the client bundle.
@@ -17,4 +21,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withMDX(nextConfig);
