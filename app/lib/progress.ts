@@ -1,4 +1,7 @@
+import { ISLANDS } from "./lessons";
+
 const KEY = "pirate-progress";
+const ISLAND_ORDER = ["crab-forge", "anchor-harbor"] as const;
 
 function getCompleted(): string[] {
   if (typeof window === "undefined") return [];
@@ -23,4 +26,23 @@ export function isComplete(lessonId: string): boolean {
 export function completedCount(lessonIds: string[]): number {
   const completed = getCompleted();
   return lessonIds.filter((id) => completed.includes(id)).length;
+}
+
+export function isIslandComplete(islandSlug: string): boolean {
+  const island = ISLANDS[islandSlug];
+  if (!island) return false;
+  return completedCount(island.lessons.map((l) => l.lessonId)) === island.lessons.length;
+}
+
+export function nextLesson(): { island: string; slot: string; title: string } | null {
+  for (const slug of ISLAND_ORDER) {
+    const island = ISLANDS[slug];
+    if (!island) continue;
+    for (const lesson of island.lessons) {
+      if (!isComplete(lesson.lessonId)) {
+        return { island: slug, slot: lesson.slot, title: lesson.title };
+      }
+    }
+  }
+  return null;
 }
