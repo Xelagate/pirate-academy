@@ -1,7 +1,7 @@
 import { ISLANDS } from "./lessons";
 
 const KEY = "pirate-progress";
-const ISLAND_ORDER = ["crab-forge", "anchor-harbor"] as const;
+const ISLAND_ORDER = Object.keys(ISLANDS);
 
 function getCompleted(): string[] {
   if (typeof window === "undefined") return [];
