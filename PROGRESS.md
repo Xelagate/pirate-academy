@@ -3,7 +3,7 @@
 **Plan:** `/home/alex/.claude/plans/imperative-noodling-haven.md`
 **Deadline:** 2026-04-30 (Colosseum hackathon)
 
-## Current Status: Day 3
+## Current Status: Day 4
 
 ## ✅ Day 1 — Scaffold
 - `create-solana-dapp@4.8.4` template `nextjs-anchor` deployed
@@ -25,11 +25,13 @@
 - [x] `cargo test` green: 5/5 (register×2, mint_badge happy path + wrong authority, test_id)
 - **Note:** mpl-core 0.11.2 feature flag is `anchor`, not `cpi`
 
-## ⬜ Day 4 — Devnet Deploy
-- [ ] Airdrop SOL, deploy program
-- [ ] `anchor idl init`
-- [ ] Codama codegen → `app/generated/`
-- [ ] `scripts/smoke.ts` prints Explorer link
+## ✅ Day 4 — Devnet Deploy
+- [x] Program deployed to devnet: `9pHeiuDFexs5HQSmsNbzxhYR1mWW223oeNwFEsz5XWiW`
+- [x] `declare_id!` + `Anchor.toml` updated to match actual deploy address
+- [x] `anchor idl upgrade` — IDL on-chain (both instructions)
+- [x] Codama codegen → `app/generated/pirate-academy/` (@solana/kit typed client)
+- [x] `scripts/smoke.ts` prints Explorer link — confirmed on devnet
+- **Note:** mpl-core feature = `anchor`; use `getRegisterPirateInstructionAsync` (not sync); use `getSignatureFromTransaction` before `sendAndConfirm`; `@solana-program/system` for SOL transfers
 
 ## ⬜ Day 5 — Wallet + Vertical Slice
 - [ ] `WalletProvider.tsx` (Phantom + Backpack + Solflare)

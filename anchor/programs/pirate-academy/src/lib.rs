@@ -9,7 +9,7 @@ mod tests;
 
 use instructions::*;
 
-declare_id!("rgGJVXV47TwooNQfVvcsfUpSh4f4DuqZAC5RNhEcExE");
+declare_id!("9pHeiuDFexs5HQSmsNbzxhYR1mWW223oeNwFEsz5XWiW");
 
 #[program]
 pub mod pirate_academy {

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@solana-program/system':
+        specifier: ^0.12.0
+        version: 0.12.0(@solana/kit@6.8.0(typescript@5.9.3))
       '@solana/kit':
         specifier: ^6.3.0
         version: 6.8.0(typescript@5.9.3)
@@ -514,6 +517,11 @@ packages:
     resolution: {integrity: sha512-toejNdIkzpUTqLSIzP0Nofr/EFel8QpPWuTtIKzfCcjn+mXpkThHxPJaNesk251rSTiWaxDZ3WxG7RxYwTWTqA==}
     peerDependencies:
       '@solana/kit': ^6.3.0
+
+  '@solana-program/system@0.12.0':
+    resolution: {integrity: sha512-ZnAAWeGVMWNtJhw3GdifI2HnhZ0A0H0qs8tBkcFvxp/8wIavvO+GOM4Jd0N22u2+Lni2zcwvcrxrsxj6Mjphng==}
+    peerDependencies:
+      '@solana/kit': ^6.1.0
 
   '@solana/accounts@6.8.0':
     resolution: {integrity: sha512-rXjFYVopaEw1H2PTBQbRjKr+0i4EFuBEhRT5E0dI4cMaabSb4KKypC2gaf47+6cjU3hMlM1AcsyIs72/MqAVBw==}
@@ -3012,6 +3020,10 @@ snapshots:
   '@rtsao/scc@1.1.0': {}
 
   '@solana-program/compute-budget@0.15.0(@solana/kit@6.8.0(typescript@5.9.3))':
+    dependencies:
+      '@solana/kit': 6.8.0(typescript@5.9.3)
+
+  '@solana-program/system@0.12.0(@solana/kit@6.8.0(typescript@5.9.3))':
     dependencies:
       '@solana/kit': 6.8.0(typescript@5.9.3)
 
