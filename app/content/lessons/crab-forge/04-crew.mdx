@@ -1,0 +1,21 @@
+export const meta = {
+  title: "Assemble Your Crew",
+  lessonId: "crab-forge-4",
+  initialCode: `struct Ship {\n    pirates: ___,\n}`,
+};
+
+## Lesson 4 — Vec Collections
+
+A ship needs a crew. Rust's `Vec<T>` is a growable, heap-allocated list of items of type `T`.
+
+```rust
+struct Ship {
+    pirates: Vec<Pirate>,
+}
+```
+
+`Vec<Pirate>` means "a list of Pirate values". You can push, pop, and iterate over it.
+
+> **In Solana terms:** on-chain accounts use fixed-size arrays (`[T; N]`) instead of `Vec` to keep account size predictable. But `Vec` is everywhere in off-chain code and instruction arguments.
+
+Fill in the blank: use `Vec<Pirate>` for the crew.

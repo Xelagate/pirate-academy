@@ -1,0 +1,21 @@
+export const meta = {
+  title: "Count the Doubloons",
+  lessonId: "crab-forge-2",
+  initialCode: `struct Treasure {\n    doubloons: ___,\n}`,
+};
+
+## Lesson 2 — Unsigned Integers
+
+Every pirate counts their gold. Rust has fixed-size integer types — you pick the size and whether negative numbers are allowed.
+
+```rust
+struct Treasure {
+    doubloons: u64,
+}
+```
+
+`u64` is an **unsigned 64-bit integer** — it holds 0 to 18,446,744,073,709,551,615. Enough for any treasure haul.
+
+> **In Solana terms:** lamports are stored as `u64`. One SOL = 1,000,000,000 lamports.
+
+Fill in the blank: what type should `doubloons` be?

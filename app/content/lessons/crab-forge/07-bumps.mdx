@@ -1,0 +1,28 @@
+export const meta = {
+  title: "Claim Your Bump",
+  lessonId: "crab-forge-7",
+  initialCode: `#[account]\n#[derive(_______)]\npub struct PirateProfile {\n    pub authority: Pubkey,\n    #[max_len(24)]\n    pub crew_name: String,\n    pub bump: ___,\n}`,
+};
+
+## Lesson 7 — InitSpace & the Bump Seed
+
+Two final pieces complete a real Anchor account struct.
+
+```rust
+#[account]
+#[derive(InitSpace)]
+pub struct PirateProfile {
+    pub authority: Pubkey,
+    #[max_len(24)]
+    pub crew_name: String,
+    pub bump: u8,
+}
+```
+
+**`InitSpace`** calculates the account's byte size at compile time — no manual `8 + 32 + 4 + 24 + 1` arithmetic.
+
+**`bump: u8`** stores the canonical bump seed (0–255) for this PDA. Saving it avoids re-deriving the bump on every instruction call.
+
+> **In Solana terms:** this is the exact struct from the `pirate-academy` program deployed on devnet. You've just learned how it was built.
+
+Fill in the blank: add `InitSpace` to `#[derive(...)]` and use `u8` for the bump field.

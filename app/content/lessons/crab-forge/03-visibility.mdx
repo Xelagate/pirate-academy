@@ -1,0 +1,22 @@
+export const meta = {
+  title: "Make It Public",
+  lessonId: "crab-forge-3",
+  initialCode: `struct Chest {\n    gold: u64,\n    map: String,\n}`,
+};
+
+## Lesson 3 — Visibility
+
+By default, everything in Rust is **private** — other modules can't see it. Add `pub` to make items public.
+
+```rust
+pub struct Chest {
+    pub gold: u64,
+    pub map: String,
+}
+```
+
+You need `pub` on the **struct itself** and on **each field** you want to expose. That's three `pub` keywords here.
+
+> **In Solana terms:** Anchor account structs and their fields must be `pub` so the program and clients can read and write them.
+
+Add `pub` in the right places — the checker counts at least 3.

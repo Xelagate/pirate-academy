@@ -1,0 +1,23 @@
+export const meta = {
+  title: "Mark It On-Chain",
+  lessonId: "crab-forge-6",
+  initialCode: `___\npub struct PirateProfile {\n    pub authority: Pubkey,\n    pub crew_name: String,\n}`,
+};
+
+## Lesson 6 — The #[account] Attribute
+
+Anchor needs to know which structs live in Solana accounts. The `#[account]` attribute macro marks them.
+
+```rust
+#[account]
+pub struct PirateProfile {
+    pub authority: Pubkey,
+    pub crew_name: String,
+}
+```
+
+Under the hood `#[account]` derives `AnchorSerialize`, `AnchorDeserialize`, and adds an 8-byte discriminator — a fingerprint Anchor uses to verify it's reading the right account type.
+
+> **In Solana terms:** every account your program owns needs `#[account]` on its state struct.
+
+Fill in the blank: add the `#[account]` attribute above the struct.

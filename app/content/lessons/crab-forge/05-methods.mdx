@@ -1,0 +1,23 @@
+export const meta = {
+  title: "Teach a Trick",
+  lessonId: "crab-forge-5",
+  initialCode: `impl Pirate {\n    pub fn hoist(___) -> String {\n        String::from("Arrr!")\n    }\n}`,
+};
+
+## Lesson 5 — Methods
+
+An `impl` block attaches methods to a type. The first parameter tells Rust how the method relates to the instance.
+
+```rust
+impl Pirate {
+    pub fn hoist(&self) -> String {
+        String::from("Arrr!")
+    }
+}
+```
+
+`&self` **borrows** the instance — the pirate isn't moved or consumed. Use `&mut self` when you need to modify it, and no `self` at all for associated functions (like constructors).
+
+> **In Solana terms:** Anchor instruction handlers are effectively `impl` methods on a context struct.
+
+Fill in the blank: add `&self` as the first parameter.
