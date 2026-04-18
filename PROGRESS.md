@@ -66,7 +66,14 @@
 - [x] `/badge` page with `BadgePageClient` (reads sig/asset from query params, Explorer links)
 - [x] `pnpm build` green — 21 static pages including all 12 lessons
 - **Note:** lesson 5 shows `FinalLesson` instead of `CodeExercise`; `markComplete` called after confirmed tx sig
-## ⬜ Day 11 — Landing + Map + Progress Gating ⚠️ HIGH RISK
+## 🔄 Day 11 — Landing + Map + Progress Gating ⚠️ HIGH RISK
+**Plan:** `docs/superpowers/plans/2026-04-18-landing-map-gating.md` — выполни все 5 задач
+**Spec:** `docs/superpowers/specs/2026-04-18-landing-map-gating-design.md`
+- [ ] Task 1: Install framer-motion + extend progress.ts
+- [ ] Task 2: Create IslandMap.tsx
+- [ ] Task 3: Create HeroSection.tsx
+- [ ] Task 4: Rewrite page.tsx + update layout.tsx
+- [ ] Task 5: Mark complete in PROGRESS.md
 ## ⬜ Day 12 — Polish (sounds, error boundaries, loading)
 ## ⬜ Day 13 — Vercel deploy + cross-browser test
 ## ⬜ Day 14 — Demo video + Colosseum submission
