@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Editor from "@monaco-editor/react";
 import { validators } from "@/lib/validators/rust";
+import { playChime } from "@/lib/hooks/use-sound";
 
 interface Props {
   lessonId: string;
@@ -24,7 +25,10 @@ export function CodeExerciseInner({ lessonId, initialCode, onPass }: Props) {
     }
     const res = validator(code);
     setResult(res);
-    if (res.ok) onPass?.();
+    if (res.ok) {
+      playChime();
+      onPass?.();
+    }
   }
 
   return (
