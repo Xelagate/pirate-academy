@@ -45,6 +45,7 @@ const cardVariant: Variants = {
 export function IslandMap() {
   const [progress, setProgress] = useState<Record<string, number>>({});
   const [crabComplete, setCrabComplete] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const p: Record<string, number> = {};
@@ -53,7 +54,23 @@ export function IslandMap() {
     }
     setProgress(p);
     setCrabComplete(isIslandComplete("crab-forge"));
+    setMounted(true);
   }, []);
+
+  if (!mounted) {
+    return (
+      <section id="islands" className="py-20 px-6 max-w-3xl mx-auto">
+        <p className="text-[10px] font-bold tracking-[4px] text-amber-500 mb-2 uppercase">
+          Archipelago
+        </p>
+        <h2 className="text-3xl font-black text-white mb-12">Choose your island</h2>
+        <div className="flex flex-col gap-4 mb-8">
+          <div className="animate-pulse rounded-2xl h-28 bg-white/5" />
+          <div className="animate-pulse rounded-2xl h-28 bg-white/5" />
+        </div>
+      </section>
+    );
+  }
 
   const anchorLocked = !crabComplete;
 
