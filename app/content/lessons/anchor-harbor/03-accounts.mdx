@@ -1,0 +1,31 @@
+export const meta = {
+  title: "Guard the Accounts",
+  lessonId: "anchor-harbor-3",
+  initialCode: `#[derive(___)]\npub struct RegisterPirate<'info> {\n    #[account(___,\n        seeds = [b"pirate", authority.key().as_ref()],\n        bump,\n        payer = authority,\n        space = 8 + PirateProfile::INIT_SPACE,\n    )]\n    pub profile: Account<'info, PirateProfile>,\n    #[account(mut)]\n    pub authority: Signer<'info>,\n    pub system_program: Program<'info, System>,\n}`,
+};
+
+## Lesson 3 — Accounts Structs
+
+The **Accounts struct** is where Anchor's safety lives. Every field is an account, and every `#[account(...)]` constraint is checked automatically before your instruction runs.
+
+```rust
+#[derive(Accounts)]
+pub struct RegisterPirate<'info> {
+    #[account(init,
+        seeds = [b"pirate", authority.key().as_ref()],
+        bump,
+        payer = authority,
+        space = 8 + PirateProfile::INIT_SPACE,
+    )]
+    pub profile: Account<'info, PirateProfile>,
+    #[account(mut)]
+    pub authority: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+```
+
+Fill in both blanks:
+- `#[derive(___)]` — the trait that makes this struct an Accounts validator
+- `#[account(___,...)]` — the constraint that allocates a new account on-chain
+
+> **In Solana terms:** `init` tells Anchor to call the System Program's `create_account` CPI on your behalf. The `seeds` + `bump` derive a **PDA** — a deterministic address no private key controls.

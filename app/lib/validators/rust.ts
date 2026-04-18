@@ -49,4 +49,28 @@ export const validators: Record<string, Validator> = {
           ok: false,
           msg: "Add InitSpace to #[derive(...)] and use u8 for bump",
         },
+
+  // Anchor Harbor Lesson 1: #[___] pub mod harbor → program
+  "anchor-harbor-1": (src) =>
+    /#\[\s*program\s*\]/.test(src)
+      ? { ok: true }
+      : { ok: false, msg: 'The attribute should be #[program]' },
+
+  // Anchor Harbor Lesson 2: Context<___> → RegisterPirate
+  "anchor-harbor-2": (src) =>
+    /Context\s*<\s*RegisterPirate\s*>/.test(src)
+      ? { ok: true }
+      : { ok: false, msg: 'Fill in the Accounts struct name: RegisterPirate' },
+
+  // Anchor Harbor Lesson 3: #[derive(___)] + init constraint
+  "anchor-harbor-3": (src) =>
+    /#\[\s*derive\s*\([^)]*Accounts[^)]*\)\s*\]/.test(src) && /\binit\b/.test(src)
+      ? { ok: true }
+      : { ok: false, msg: 'Add Accounts to #[derive(...)] and init to the account constraint' },
+
+  // Anchor Harbor Lesson 4: TS call .registerPirate(...)
+  "anchor-harbor-4": (src) =>
+    /\.registerPirate\s*\(/.test(src)
+      ? { ok: true }
+      : { ok: false, msg: 'Call .registerPirate("Your Crew") on program.methods' },
 };

@@ -1,0 +1,19 @@
+export const meta = {
+  title: "Drop Anchor",
+  lessonId: "anchor-harbor-5",
+  initialCode: "",
+  isMint: true,
+};
+
+## Lesson 5 — Drop Anchor 🏴‍☠️
+
+You've made it to the final port. Time to prove your voyage on-chain.
+
+Connect your wallet, pick a crew name, and sign a **real devnet transaction**. The program will:
+
+1. Create your **PirateProfile PDA** on Solana devnet
+2. Mint a **Metaplex Core NFT** — your Pirate Academy graduation badge
+
+This is not a simulation. Your badge will live on-chain.
+
+> **In Solana terms:** this transaction calls two instructions atomically: `register_pirate` (or skips it if you already have a profile) and `mint_badge`. The asset keypair is generated client-side, and both your wallet and the asset sign the same transaction.

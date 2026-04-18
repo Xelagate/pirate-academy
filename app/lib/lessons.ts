@@ -4,6 +4,7 @@ export interface LessonMeta {
   title: string;
   lessonId: string;
   initialCode: string;
+  isMint?: boolean;
 }
 
 export interface LessonEntry {
@@ -39,6 +40,18 @@ export const ISLANDS: Record<string, IslandData> = {
       { slot: "07", title: "Claim Your Bump",        lessonId: "crab-forge-7" },
     ],
   },
+  "anchor-harbor": {
+    title: "Anchor Harbor",
+    emoji: "⚓",
+    description: "Write real Anchor programs — declare your program, define instructions, build Accounts structs, and mint your graduation badge on devnet.",
+    lessons: [
+      { slot: "01", title: "Hoist the Program Flag",  lessonId: "anchor-harbor-1" },
+      { slot: "02", title: "Name Your Instruction",   lessonId: "anchor-harbor-2" },
+      { slot: "03", title: "Guard the Accounts",      lessonId: "anchor-harbor-3" },
+      { slot: "04", title: "Call from the Shore",     lessonId: "anchor-harbor-4" },
+      { slot: "05", title: "Drop Anchor",             lessonId: "anchor-harbor-5" },
+    ],
+  },
 };
 
 // Static strings required by Next.js/webpack bundler — no dynamic paths allowed.
@@ -54,5 +67,12 @@ export const lessonImporters: Record<
     "05": () => import("@/content/lessons/crab-forge/05-methods.mdx") as unknown as Promise<LessonModule>,
     "06": () => import("@/content/lessons/crab-forge/06-account.mdx") as unknown as Promise<LessonModule>,
     "07": () => import("@/content/lessons/crab-forge/07-bumps.mdx") as unknown as Promise<LessonModule>,
+  },
+  "anchor-harbor": {
+    "01": () => import("@/content/lessons/anchor-harbor/01-declare.mdx") as unknown as Promise<LessonModule>,
+    "02": () => import("@/content/lessons/anchor-harbor/02-instruction.mdx") as unknown as Promise<LessonModule>,
+    "03": () => import("@/content/lessons/anchor-harbor/03-accounts.mdx") as unknown as Promise<LessonModule>,
+    "04": () => import("@/content/lessons/anchor-harbor/04-client.mdx") as unknown as Promise<LessonModule>,
+    "05": () => import("@/content/lessons/anchor-harbor/05-drop-anchor.mdx") as unknown as Promise<LessonModule>,
   },
 };

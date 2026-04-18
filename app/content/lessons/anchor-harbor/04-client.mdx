@@ -1,0 +1,19 @@
+export const meta = {
+  title: "Call from the Shore",
+  lessonId: "anchor-harbor-4",
+  initialCode: `const sig = await program.methods\n  .___("Sea Dogs")\n  .rpc();`,
+};
+
+## Lesson 4 — TypeScript Client
+
+Anchor auto-generates a TypeScript client from your IDL (Interface Description Language). You can call any instruction with a type-safe method chain.
+
+```typescript
+const sig = await program.methods
+  .registerPirate("Sea Dogs")
+  .rpc();
+```
+
+Fill in the blank: the camelCase name of the instruction you want to call.
+
+> **In Solana terms:** `.rpc()` signs and sends the transaction in one step. Under the hood it resolves all PDAs and required accounts from the IDL so you don't have to pass them manually (for PDAs). This is the "happy path" — for more control use `.instruction()` or `.transaction()` and assemble manually.

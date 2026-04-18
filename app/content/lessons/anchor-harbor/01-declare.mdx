@@ -1,0 +1,25 @@
+export const meta = {
+  title: "Hoist the Program Flag",
+  lessonId: "anchor-harbor-1",
+  initialCode: `#[___]\npub mod harbor {\n    use super::*;\n    // instructions live here\n}`,
+};
+
+## Lesson 1 — The Program Module
+
+Every Anchor program needs one special attribute that tells Solana: *"this module contains on-chain instructions."*
+
+```rust
+#[program]
+pub mod harbor {
+    use super::*;
+
+    pub fn register_pirate(ctx: Context<RegisterPirate>, crew_name: String) -> Result<()> {
+        // ...
+        Ok(())
+    }
+}
+```
+
+Fill in the blank: what Anchor attribute marks a module as an on-chain program?
+
+> **In Solana terms:** `#[program]` is the entry point macro. Anchor uses it to generate the dispatcher that routes incoming instructions to the right handler function.

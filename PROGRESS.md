@@ -56,7 +56,16 @@
 - [x] `/island/[island]/[lesson]` — SSG lesson page: breadcrumb, progress bar, MDX prose, LessonClient
 - [x] `/island/[island]` — island index: per-lesson completion cards, overall progress bar
 - **Note:** amber (#F59E0B) accent for completed state; soft nav (Next always visible, highlighted on pass)
-## ⬜ Days 9–10 — Anchor Harbor (5 lessons) + `/badge`
+## ✅ Days 9–10 — Anchor Harbor (5 lessons) + `/badge`
+- [x] `anchor-harbor` island in `ISLANDS` + `lessonImporters` in `lessons.ts`
+- [x] `LessonMeta.isMint` flag for non-code culmination lesson
+- [x] Validators `anchor-harbor-1..4` in `validators/rust.ts`
+- [x] 5 MDX lessons in `app/content/lessons/anchor-harbor/`
+- [x] `FinalLesson.tsx` — mint + redirect to `/badge?sig=...&asset=...`
+- [x] `LessonClient.tsx` renders `FinalLesson` when `meta.isMint === true`
+- [x] `/badge` page with `BadgePageClient` (reads sig/asset from query params, Explorer links)
+- [x] `pnpm build` green — 21 static pages including all 12 lessons
+- **Note:** lesson 5 shows `FinalLesson` instead of `CodeExercise`; `markComplete` called after confirmed tx sig
 ## ⬜ Day 11 — Landing + Map + Progress Gating ⚠️ HIGH RISK
 ## ⬜ Day 12 — Polish (sounds, error boundaries, loading)
 ## ⬜ Day 13 — Vercel deploy + cross-browser test

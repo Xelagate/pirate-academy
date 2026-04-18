@@ -1,0 +1,25 @@
+export const meta = {
+  title: "Name Your Instruction",
+  lessonId: "anchor-harbor-2",
+  initialCode: `pub fn register_pirate(\n    ctx: Context<___>,\n    crew_name: String,\n) -> Result<()> {\n    Ok(())\n}`,
+};
+
+## Lesson 2 — Instructions & Context
+
+An Anchor instruction is just a Rust function. Its first argument is always `Context<T>`, where `T` is the name of the **Accounts struct** that validates all the accounts the instruction needs.
+
+```rust
+pub fn register_pirate(
+    ctx: Context<RegisterPirate>,
+    crew_name: String,
+) -> Result<()> {
+    let profile = &mut ctx.accounts.profile;
+    profile.authority = ctx.accounts.authority.key();
+    profile.crew_name = crew_name;
+    Ok(())
+}
+```
+
+Fill in the blank: what Accounts struct should this instruction use?
+
+> **In Solana terms:** `Context<T>` bundles account validation + the account data together. Anchor runs `T`'s constraints before your function body executes — so by the time you touch `ctx.accounts`, everything is already verified.

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { CodeExercise } from "@/components/lessons/CodeExercise";
+import { FinalLesson } from "@/components/lessons/FinalLesson";
 import { markComplete, isComplete } from "@/lib/progress";
 import type { LessonMeta } from "@/lib/lessons";
 
@@ -38,11 +39,15 @@ export function LessonClient({
 
   return (
     <div className="flex flex-col gap-6">
-      <CodeExercise
-        lessonId={meta.lessonId}
-        initialCode={meta.initialCode}
-        onPass={handlePass}
-      />
+      {meta.isMint ? (
+        <FinalLesson lessonId={meta.lessonId} />
+      ) : (
+        <CodeExercise
+          lessonId={meta.lessonId}
+          initialCode={meta.initialCode}
+          onPass={handlePass}
+        />
+      )}
 
       <div className="flex items-center justify-between border-t border-border pt-4">
         {prevSlot ? (
