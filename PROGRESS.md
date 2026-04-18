@@ -19,10 +19,11 @@
 - [x] `instructions/register_pirate.rs` — seeds `[b"pirate", authority]`, validates name 1–24 ASCII
 - [x] `cargo test` green: 3/3 (register_pirate happy path + empty name rejection + test_id)
 
-## ⬜ Day 3 — mpl-core CPI ⚠️ HIGH RISK
-- [ ] `instructions/mint_badge.rs` with mpl-core CPI
-- [ ] Dump mpl_core fixture, configure `Anchor.toml`
-- [ ] `anchor test` green (2 specs)
+## ✅ Day 3 — mpl-core CPI
+- [x] `instructions/mint_badge.rs` with mpl-core CPI (CreateV2CpiBuilder)
+- [x] mpl_core.so fixture in `tests/fixtures/`, `Anchor.toml` uses `cargo test`
+- [x] `cargo test` green: 5/5 (register×2, mint_badge happy path + wrong authority, test_id)
+- **Note:** mpl-core 0.11.2 feature flag is `anchor`, not `cpi`
 
 ## ⬜ Day 4 — Devnet Deploy
 - [ ] Airdrop SOL, deploy program

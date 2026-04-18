@@ -18,4 +18,8 @@ pub mod pirate_academy {
     pub fn register_pirate(ctx: Context<RegisterPirate>, crew_name: String) -> Result<()> {
         instructions::register_pirate::register_pirate(ctx, crew_name)
     }
+
+    pub fn mint_badge(ctx: Context<MintBadge>) -> Result<()> {
+        instructions::mint_badge::mint_badge(ctx)
+    }
 }
