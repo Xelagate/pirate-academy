@@ -81,7 +81,7 @@ export function HeroSection() {
       />
 
       {/* Nav */}
-      <nav className="relative z-10 flex justify-between items-center px-8 py-5 border-b border-amber-500/10">
+      <nav className="relative z-20 flex justify-between items-center px-8 py-5 border-b border-amber-500/10">
         <span className="text-amber-500 font-black text-sm tracking-[3px] uppercase">
           ⚓ Pirate Academy
         </span>

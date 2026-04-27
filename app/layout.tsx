@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./components/providers";
-import { MobileBlocker } from "./components/MobileBlocker";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -34,7 +33,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${geistMono.variable} antialiased`}>
         <Providers>
-          <MobileBlocker />
           {children}
         </Providers>
       </body>

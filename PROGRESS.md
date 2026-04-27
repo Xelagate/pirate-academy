@@ -80,5 +80,10 @@
 - [x] IslandMap skeleton cards while `!mounted`
 - [x] `pnpm build` green — 21 static pages
 - **Note:** AudioContext wrapped in try-catch for silent fail in sandboxed envs
-## ⬜ Day 13 — Vercel deploy + cross-browser test
+## ✅ Day 13 — Vercel deploy + cross-browser test
+- [x] Vercel CLI installed + project linked (`xelas-projects-db0e78b9/course`)
+- [x] `.vercelignore` added (excludes node_modules, anchor, scripts, docs)
+- [x] Production deploy: https://course-eight-plum.vercel.app (READY, 21 static pages)
+- [x] Cross-browser test: полный happy path подтверждён — бейдж получен на devnet ✓
+- [x] Починен z-index баг: nav поднят до z-20 (hero-контент блокировал pointer events)
 ## ⬜ Day 14 — Demo video + Colosseum submission
