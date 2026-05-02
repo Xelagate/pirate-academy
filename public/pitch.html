@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pirate Academy — Pitch Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --gold:     #c9a227;
+  --gold-dim: rgba(201,162,39,0.25);
+  --cyan:     #22d3ee;
+  --cyan-dim: rgba(34,211,238,0.18);
+  --red:      #ef4444;
+  --purple:   #a78bfa;
+  --green:    #22c55e;
+  --bg:       #07090f;
+  --bg2:      #0c1020;
+  --glass:    rgba(255,255,255,0.035);
+  --border:   rgba(255,255,255,0.07);
+  --text:     #e2e8f0;
+  --muted:    #64748b;
+}
+
+html { scroll-snap-type: y mandatory; overflow-y: scroll; height: 100%; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+
+/* ── Canvas ── */
+#bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* ── Nav dots ── */
+#nav-dots {
+  position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 9px; z-index: 200;
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: transparent; border: 1px solid var(--muted);
+  cursor: pointer; transition: all 0.3s;
+}
+.dot.active { background: var(--gold); border-color: var(--gold); transform: scale(1.5); box-shadow: 0 0 8px var(--gold); }
+
+/* ── Slide base ── */
+.slide {
+  min-height: 100vh; scroll-snap-align: start;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 80px 100px; position: relative; z-index: 1; overflow: hidden;
+}
+
+/* ── Slide label ── */
+.slide-label {
+  position: absolute; top: 28px; left: 50%; transform: translateX(-50%);
+  font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.35em;
+  color: var(--muted); text-transform: uppercase;
+}
+
+/* ── Glow orb ── */
+.orb {
+  position: absolute; border-radius: 50%; filter: blur(90px);
+  opacity: 0.12; pointer-events: none; z-index: 0;
+}
+
+/* ── Typography ── */
+.headline {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 900; color: var(--gold); letter-spacing: 0.08em; line-height: 1.1;
+  text-shadow: 0 0 40px rgba(201,162,39,0.55), 0 0 100px rgba(201,162,39,0.15);
+  text-align: center;
+}
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  font-weight: 700; letter-spacing: 0.04em; text-align: center; margin-bottom: 8px;
+}
+.subtitle { font-size: clamp(0.9rem, 1.8vw, 1.15rem); color: var(--muted); text-align: center; line-height: 1.6; }
+
+/* ── Glass card ── */
+.glass {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 20px; backdrop-filter: blur(16px);
+}
+
+/* ── Reveal ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; } .d4 { transition-delay: 0.4s; }
+.d5 { transition-delay: 0.5s; } .d6 { transition-delay: 0.6s; }
+
+
+/* ══════════════════════════════════════
+   SLIDE 0 — HERO
+══════════════════════════════════════ */
+.slide-hero { text-align: center; gap: 16px; }
+
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url('art/map.png');
+  background-size: cover; background-position: center;
+  opacity: 0.18;
+  filter: saturate(0.7);
+}
+.hero-bg-fade {
+  position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(7,9,15,0.3) 0%, rgba(7,9,15,0.96) 75%);
+}
+.hero-map {
+  width: 280px; border-radius: 18px;
+  border: 2px solid var(--gold); box-shadow: 0 0 60px rgba(201,162,39,0.45), 0 0 120px rgba(201,162,39,0.15);
+  object-fit: cover; margin-bottom: 12px; position: relative; z-index: 1;
+}
+
+.hero-tagline { font-size: clamp(1rem, 2.2vw, 1.35rem); color: var(--cyan); font-weight: 300; letter-spacing: 0.04em; }
+.hero-sub { font-size: clamp(0.85rem, 1.5vw, 1rem); color: var(--muted); margin-top: 2px; }
+
+.pills { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; justify-content: center; }
+.pill {
+  padding: 7px 16px; border-radius: 100px; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.04em;
+}
+.pill.g { background: rgba(201,162,39,0.12); border: 1px solid var(--gold-dim); color: var(--gold); }
+.pill.c { background: rgba(34,211,238,0.08); border: 1px solid var(--cyan-dim); color: var(--cyan); }
+.pill.p { background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.25); color: var(--purple); }
+
+.scroll-hint {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  color: var(--muted); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+  animation: bob 2s ease-in-out infinite;
+}
+@keyframes bob { 0%,100%{ transform:translateX(-50%) translateY(0) } 50%{ transform:translateX(-50%) translateY(7px) } }
+
+
+/* ══════════════════════════════════════
+   SLIDE 1 — PROBLEM
+══════════════════════════════════════ */
+.slide-problem { background: radial-gradient(ellipse 55% 50% at 50% 50%, #190808 0%, var(--bg) 70%); }
+.slide-problem .section-title { color: var(--red); }
+
+.problem-body {
+  display: flex; align-items: center; gap: 60px;
+  max-width: 1050px; width: 100%; margin-top: 32px;
+}
+
+.stat-block { text-align: center; flex-shrink: 0; }
+.big-num {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(4rem, 9vw, 7.5rem); font-weight: 900; line-height: 1;
+  background: linear-gradient(135deg, var(--red), #f97316);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.big-num-sub { font-size: 0.85rem; color: var(--muted); margin-top: 8px; max-width: 180px; line-height: 1.5; }
+.mini-stat {
+  margin-top: 20px; padding: 12px 18px; border-radius: 12px;
+  background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.2);
+}
+.mini-stat .n { font-size: 1.9rem; font-weight: 700; color: #f97316; font-family: 'Cinzel', serif; }
+.mini-stat .l { font-size: 0.75rem; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+
+.problem-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; flex: 1; }
+.p-card {
+  padding: 18px 20px; border-radius: 16px;
+  background: rgba(239,68,68,0.04); border: 1px solid rgba(239,68,68,0.13);
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.p-card .x { color: var(--red); font-size: 1.2rem; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.p-card h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; }
+.p-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.55; }
+
+
+/* ══════════════════════════════════════
+   SLIDE 2 — COMPETITORS
+══════════════════════════════════════ */
+.slide-competitors { background: radial-gradient(ellipse 55% 50% at 50% 50%, #09091a 0%, var(--bg) 70%); }
+.slide-competitors .section-title { color: var(--cyan); }
+
+.comp-wrap { width: 100%; max-width: 900px; overflow-x: auto; margin-top: 30px; }
+.comp-table { width: 100%; border-collapse: collapse; }
+.comp-table th {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; color: var(--muted);
+  padding: 10px 14px; text-align: center; border-bottom: 1px solid var(--border);
+}
+.comp-table th:first-child { text-align: left; }
+.comp-table td {
+  padding: 13px 14px; text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.85rem;
+}
+.comp-table td:first-child { text-align: left; font-weight: 500; font-size: 0.88rem; }
+.comp-table tr.us td {
+  background: rgba(201,162,39,0.05);
+  border-top: 1px solid rgba(201,162,39,0.25); border-bottom: 1px solid rgba(201,162,39,0.25);
+}
+.comp-table tr.us td:first-child { color: var(--gold); font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.9rem; }
+.ck { color: var(--green); font-size: 1.05rem; }
+.cx { color: rgba(239,68,68,0.45); font-size: 1.05rem; }
+.cp { color: #f59e0b; font-size: 1.05rem; }
+
+.comp-note { margin-top: 18px; font-size: 0.8rem; color: var(--muted); font-style: italic; text-align: center; }
+
+
+/* ══════════════════════════════════════
+   SLIDE 3 — PRODUCT SHOWCASE
+══════════════════════════════════════ */
+.slide-product .section-title { color: var(--gold); }
+
+.product-body { display: flex; gap: 46px; max-width: 1100px; width: 100%; align-items: flex-start; margin-top: 28px; }
+
+/* island art cards on the left */
+.island-cards { display: flex; flex-direction: column; gap: 16px; flex: 1; }
+.island-art-card {
+  border-radius: 16px; overflow: hidden; position: relative;
+  border: 1px solid var(--gold-dim); box-shadow: 0 0 30px rgba(201,162,39,0.12);
+}
+.island-art-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
+.island-art-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 10px 16px; font-size: 0.85rem; font-weight: 600;
+  background: linear-gradient(0deg, rgba(7,9,15,0.92) 0%, transparent 100%);
+  display: flex; align-items: center; gap: 8px;
+}
+.island-art-label .tag {
+  font-size: 0.7rem; padding: 2px 8px; border-radius: 6px;
+  background: rgba(201,162,39,0.2); color: var(--gold); font-weight: 500;
+}
+
+/* screenshot overlay (add when ready) */
+.product-screen {
+  flex: 1; border-radius: 16px; overflow: hidden;
+  border: 1px solid var(--gold-dim); box-shadow: 0 0 60px rgba(201,162,39,0.18);
+  min-height: 300px; display: flex; align-items: center; justify-content: center;
+  background: var(--bg2);
+}
+.product-screen img { width: 100%; height: auto; display: block; }
+.screen-placeholder { padding: 48px; text-align: center; color: var(--muted); font-size: 0.82rem; line-height: 1.7; }
+
+.features { display: flex; flex-direction: column; gap: 16px; flex: 0 0 310px; }
+.feat {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 16px 18px; border-radius: 14px;
+  background: var(--glass); border: 1px solid var(--border);
+}
+.feat-icon {
+  width: 42px; height: 42px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+}
+.feat-icon.g { background: rgba(201,162,39,0.12); }
+.feat-icon.c { background: rgba(34,211,238,0.1); }
+.feat-icon.p { background: rgba(167,139,250,0.1); }
+.feat h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 3px; }
+.feat p { font-size: 0.77rem; color: var(--muted); line-height: 1.55; }
+
+
+/* ══════════════════════════════════════
+   SLIDE 4 — USE CASE
+══════════════════════════════════════ */
+.slide-usecase { background: radial-gradient(ellipse 55% 50% at 50% 50%, #081508 0%, var(--bg) 70%); }
+.slide-usecase .section-title { color: var(--green); }
+
+.journey {
+  display: flex; align-items: flex-start;
+  max-width: 980px; width: 100%; margin-top: 38px;
+}
+.j-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
+.j-step::after {
+  content: '→'; position: absolute; right: -10px; top: 16px;
+  color: var(--border); font-size: 1.4rem; line-height: 1;
+}
+.j-step:last-child::after { display: none; }
+.j-circle {
+  width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--gold);
+  display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+  margin-bottom: 12px; background: rgba(201,162,39,0.07); box-shadow: 0 0 18px rgba(201,162,39,0.2);
+}
+.j-step h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
+.j-step p { font-size: 0.75rem; color: var(--muted); line-height: 1.45; padding: 0 6px; }
+
+.persona {
+  margin-top: 34px; padding: 18px 26px; border-radius: 14px;
+  background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.18);
+  max-width: 660px; text-align: center;
+}
+.persona p { font-size: 0.9rem; line-height: 1.65; color: var(--text); }
+.persona .name { color: var(--green); font-weight: 600; }
+
+
+/* ══════════════════════════════════════
+   SLIDE 5 — TRACTION
+══════════════════════════════════════ */
+.slide-traction .section-title { color: var(--cyan); }
+
+.traction-nums {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 18px; max-width: 860px; width: 100%; margin-top: 30px;
+}
+.t-card { padding: 26px 16px; border-radius: 18px; text-align: center; }
+.t-card .tn {
+  font-family: 'Cinzel', serif; font-size: 2.6rem; font-weight: 900;
+  line-height: 1; margin-bottom: 8px;
+}
+.t-card .tl { font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
+.t-card.gc { background: rgba(201,162,39,0.05); border: 1px solid rgba(201,162,39,0.18); }
+.t-card.gc .tn { color: var(--gold); }
+.t-card.cc { background: rgba(34,211,238,0.05); border: 1px solid rgba(34,211,238,0.18); }
+.t-card.cc .tn { color: var(--cyan); }
+.t-card.grc { background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.18); }
+.t-card.grc .tn { color: var(--green); }
+.t-card.pc { background: rgba(167,139,250,0.05); border: 1px solid rgba(167,139,250,0.18); }
+.t-card.pc .tn { color: var(--purple); }
+
+.live-pill {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 28px;
+  padding: 9px 20px; border-radius: 100px;
+  background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25);
+  color: var(--green); font-size: 0.85rem; font-weight: 600;
+}
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pdot 1.5s ease-in-out infinite; }
+@keyframes pdot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.65)} }
+
+.live-url { font-size: 0.8rem; color: var(--cyan); margin-top: 7px; letter-spacing: 0.04em; }
+.hackathon-note { font-size: 0.75rem; color: var(--muted); margin-top: 10px; }
+
+/* stack */
+.traction-tech { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+.tech-tag {
+  padding: 5px 13px; border-radius: 8px; font-size: 0.72rem; font-weight: 500;
+  background: var(--glass); border: 1px solid var(--border); color: var(--muted);
+}
+
+
+/* ══════════════════════════════════════
+   SLIDE 6 — WHY NOW
+══════════════════════════════════════ */
+.slide-whynow { background: radial-gradient(ellipse 55% 50% at 50% 50%, #0e0818 0%, var(--bg) 70%); }
+.slide-whynow .section-title { color: var(--purple); }
+
+.whynow-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 22px; max-width: 900px; width: 100%; margin-top: 30px; }
+.wn-card { padding: 28px 24px; border-radius: 20px; text-align: center; }
+.wn-card .icon { font-size: 2.2rem; margin-bottom: 14px; }
+.wn-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+.wn-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+.wn-card .hl { color: var(--purple); font-weight: 600; }
+
+
+/* ══════════════════════════════════════
+   SLIDE 7 — WHY YOU (TEAM)
+══════════════════════════════════════ */
+.slide-team .section-title { color: var(--gold); }
+
+.founder-wrap {
+  display: flex; gap: 50px; max-width: 880px; width: 100%;
+  margin-top: 30px; padding: 38px 44px; border-radius: 24px; align-items: center;
+}
+.avatar {
+  width: 150px; height: 150px; border-radius: 50%; flex-shrink: 0;
+  border: 3px solid var(--gold); box-shadow: 0 0 40px rgba(201,162,39,0.3);
+  object-fit: cover;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4.5rem; background: linear-gradient(135deg, #1a2a4a, #0d1530); overflow: hidden;
+}
+.founder-info h3 { font-family: 'Cinzel', serif; font-size: 1.7rem; color: var(--gold); margin-bottom: 2px; }
+.founder-role { font-size: 0.82rem; color: var(--cyan); margin-bottom: 18px; letter-spacing: 0.05em; }
+.creds { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.creds li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.86rem; line-height: 1.5; }
+.creds li::before { content: '⚓'; font-size: 0.75rem; color: var(--gold); flex-shrink: 0; margin-top: 3px; }
+.creds strong { color: var(--text); }
+.f-quote {
+  margin-top: 22px; padding: 14px 18px; border-left: 3px solid var(--gold);
+  font-style: italic; font-size: 0.88rem; color: var(--muted); line-height: 1.65;
+}
+
+
+/* ══════════════════════════════════════
+   SLIDE 8 — ROADMAP
+══════════════════════════════════════ */
+.slide-roadmap .section-title { color: var(--cyan); }
+
+.roadmap {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 18px; max-width: 980px; width: 100%; margin-top: 36px; position: relative;
+}
+.roadmap::before {
+  content: ''; position: absolute; top: 31px; left: 80px; right: 80px; height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--cyan), var(--purple), var(--green));
+  opacity: 0.25; z-index: 0;
+}
+.r-phase { display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
+.r-dot {
+  width: 62px; height: 62px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+  margin-bottom: 14px; border: 2px solid; background: var(--bg);
+}
+.r-dot.q2 { border-color: var(--gold); box-shadow: 0 0 20px rgba(201,162,39,0.25); }
+.r-dot.q3 { border-color: var(--cyan); box-shadow: 0 0 20px rgba(34,211,238,0.2); }
+.r-dot.q4 { border-color: var(--purple); box-shadow: 0 0 20px rgba(167,139,250,0.2); }
+.r-dot.y27 { border-color: var(--green); box-shadow: 0 0 20px rgba(34,197,94,0.2); }
+.r-label { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.12em; margin-bottom: 10px; }
+.r-label.q2 { color: var(--gold); } .r-label.q3 { color: var(--cyan); }
+.r-label.q4 { color: var(--purple); } .r-label.y27 { color: var(--green); }
+.r-phase h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 8px; }
+.r-items { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.r-items li { font-size: 0.75rem; color: var(--muted); line-height: 1.45; }
+
+
+/* ══════════════════════════════════════
+   SLIDE 9 — CTA / END
+══════════════════════════════════════ */
+.slide-end { text-align: center; gap: 0; }
+.slide-end .headline { margin-bottom: 4px; }
+
+.end-badge {
+  width: 180px; height: 180px; border-radius: 50%; object-fit: cover;
+  border: 3px solid var(--gold); box-shadow: 0 0 60px rgba(201,162,39,0.6), 0 0 120px rgba(201,162,39,0.2), 0 0 200px rgba(201,162,39,0.08);
+  margin-bottom: 28px; animation: gp 3s ease-in-out infinite;
+}
+@keyframes gp {
+  0%,100% { box-shadow: 0 0 40px rgba(201,162,39,0.4), 0 0 80px rgba(201,162,39,0.15); }
+  50% { box-shadow: 0 0 80px rgba(201,162,39,0.7), 0 0 160px rgba(201,162,39,0.3); }
+}
+.end-quote {
+  max-width: 640px; font-size: clamp(1rem, 2.2vw, 1.35rem);
+  color: var(--muted); font-style: italic; line-height: 1.75; margin: 14px auto 28px;
+}
+.end-quote span { color: var(--gold); font-style: normal; font-weight: 600; }
+.end-links { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.end-link {
+  padding: 13px 26px; border-radius: 100px; font-size: 0.88rem; font-weight: 600;
+  text-decoration: none; letter-spacing: 0.04em; transition: all 0.3s;
+}
+.end-link.primary { background: var(--gold); color: var(--bg); }
+.end-link.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.end-link:hover { transform: translateY(-2px); filter: brightness(1.12); }
+.colosseum-tag {
+  margin-top: 28px; display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px; border-radius: 100px;
+  background: rgba(201,162,39,0.07); border: 1px solid rgba(201,162,39,0.18);
+  font-size: 0.76rem; color: var(--gold); letter-spacing: 0.05em;
+}
+
+/* ── Revenue (optional) slide ── same slide-product layout */
+.slide-revenue .section-title { color: var(--purple); }
+.rev-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 880px; width: 100%; margin-top: 30px; }
+.rev-card { padding: 28px 22px; border-radius: 18px; text-align: center; }
+.rev-card .icon { font-size: 2rem; margin-bottom: 14px; }
+.rev-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+.rev-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+.rev-card .price { margin-top: 12px; font-family: 'Cinzel', serif; font-size: 1.3rem; color: var(--text); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<nav id="nav-dots">
+  <div class="dot" onclick="goTo(0)" title="Intro"></div>
+  <div class="dot" onclick="goTo(1)" title="Problem"></div>
+  <div class="dot" onclick="goTo(2)" title="Competitors"></div>
+  <div class="dot" onclick="goTo(3)" title="Product"></div>
+  <div class="dot" onclick="goTo(4)" title="Use Case"></div>
+  <div class="dot" onclick="goTo(5)" title="Traction"></div>
+  <div class="dot" onclick="goTo(6)" title="Why Now"></div>
+  <div class="dot" onclick="goTo(7)" title="Team"></div>
+  <div class="dot" onclick="goTo(8)" title="Roadmap"></div>
+  <div class="dot" onclick="goTo(9)" title="Revenue"></div>
+  <div class="dot" onclick="goTo(10)" title="End"></div>
+</nav>
+
+
+<!-- ═══ SLIDE 0 — HERO ═══ -->
+<section class="slide slide-hero" id="slide-0">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-fade"></div>
+  <div class="orb" style="width:500px;height:500px;background:var(--gold);top:5%;left:15%;"></div>
+  <div class="orb" style="width:350px;height:350px;background:var(--cyan);top:40%;right:10%;"></div>
+
+  <img class="hero-map reveal" src="art/map.png" alt="Pirate Academy Map">
+  <h1 class="headline reveal d1">PIRATE ACADEMY</h1>
+  <p class="hero-tagline reveal d2">Learn Solana Development the Fun Way</p>
+  <p class="hero-sub reveal d3">Write code · Mint proof · Ship dapps</p>
+
+  <div class="pills reveal d4">
+    <span class="pill g">⚓ Rust &amp; Anchor</span>
+    <span class="pill c">🔗 On-chain Proof</span>
+    <span class="pill p">🎮 Gamified Progress</span>
+  </div>
+
+  <p class="scroll-hint">↓ scroll to explore</p>
+</section>
+
+
+<!-- ═══ SLIDE 1 — PROBLEM ═══ -->
+<section class="slide slide-problem" id="slide-1">
+  <span class="slide-label">The Problem</span>
+  <h2 class="section-title reveal">Solana dev growth is exploding.<br>The learning path is broken.</h2>
+  <p class="subtitle reveal d1">17,700 active Solana devs in 2025 · growing +29% YoY · but most quit before shipping</p>
+
+  <div class="problem-body">
+    <div class="stat-block reveal d2">
+      <div class="big-num">+29%</div>
+      <p class="big-num-sub">YoY growth in Solana developers<br>(Electric Capital 2025)</p>
+      <div class="mini-stat">
+        <div class="n">17,700</div>
+        <div class="l">active builders —<br>ecosystem needs 10×</div>
+      </div>
+    </div>
+
+    <div class="problem-cards reveal d3">
+      <div class="p-card">
+        <span class="x">✗</span>
+        <div>
+          <h4>Documentation walls</h4>
+          <p>Dense text, zero context, no feedback loop — devs feel lost within hours</p>
+        </div>
+      </div>
+      <div class="p-card">
+        <span class="x">✗</span>
+        <div>
+          <h4>Passive learning</h4>
+          <p>Watch → copy → paste → forget. No real understanding, no retention</p>
+        </div>
+      </div>
+      <div class="p-card">
+        <span class="x">✗</span>
+        <div>
+          <h4>No proof of progress</h4>
+          <p>No checkpoints, no achievements, nothing to show employers or DAOs</p>
+        </div>
+      </div>
+      <div class="p-card">
+        <span class="x">✗</span>
+        <div>
+          <h4>Massive skill gap</h4>
+          <p>Giant jump from Hello World to a real dapp — most devs never make it across</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 2 — COMPETITORS ═══ -->
+<section class="slide slide-competitors" id="slide-2">
+  <span class="slide-label">Competitive Landscape</span>
+  <h2 class="section-title reveal">We're not replacing docs. We're replacing frustration.</h2>
+  <p class="subtitle reveal d1">No platform combines all of this — especially for Solana</p>
+
+  <div class="comp-wrap reveal d2">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Code Editor</th>
+          <th>On-chain Proof</th>
+          <th>Gamified</th>
+          <th>Solana-Native</th>
+          <th>Wallet Connect</th>
+          <th>Free to Start</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="us">
+          <td>⚓ Pirate Academy</td>
+          <td><span class="ck">✓</span></td>
+          <td><span class="ck">✓</span></td>
+          <td><span class="ck">✓</span></td>
+          <td><span class="ck">✓</span></td>
+          <td><span class="ck">✓</span></td>
+          <td><span class="ck">✓</span></td>
+        </tr>
+        <tr>
+          <td>Alchemy University</td>
+          <td><span class="ck">✓</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="ck">✓</span></td>
+        </tr>
+        <tr>
+          <td>RiseIn</td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cp">~</span></td>
+          <td><span class="ck">✓</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cp">~</span></td>
+        </tr>
+        <tr>
+          <td>Solana Cookbook</td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="ck">✓</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="ck">✓</span></td>
+        </tr>
+        <tr>
+          <td>YouTube / Udemy</td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cx">✗</span></td>
+          <td><span class="cp">~</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="comp-note reveal d3">⚓ Pirate Academy is the only platform where you learn Solana by doing — and prove it on-chain.</p>
+</section>
+
+
+<!-- ═══ SLIDE 3 — PRODUCT SHOWCASE ═══ -->
+<section class="slide slide-product" id="slide-3">
+  <span class="slide-label">Product</span>
+  <h2 class="section-title reveal">Built. Deployed. <span style="color:var(--green);">● Live.</span></h2>
+  <p class="subtitle reveal d1">2 islands · 12 interactive lessons · real devnet transactions</p>
+
+  <div class="product-body reveal d2">
+    <div class="island-cards">
+      <div class="island-art-card">
+        <img src="art/crab-forge.png" alt="Crab Forge">
+        <div class="island-art-label">
+          🦀 Crab Forge — Rust Basics
+          <span class="tag">7 lessons</span>
+        </div>
+      </div>
+      <div class="island-art-card" style="border-color:rgba(34,211,238,0.3);box-shadow:0 0 30px rgba(34,211,238,0.1);">
+        <img src="art/anchor-harbor.png" alt="Anchor Harbor">
+        <div class="island-art-label">
+          ⚓ Anchor Harbor — Smart Contracts
+          <span class="tag" style="background:rgba(34,211,238,0.15);color:var(--cyan);">5 lessons</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon g">🗺️</div>
+        <div>
+          <h4>Island Progress Map</h4>
+          <p>Visual pirate map with gated progression — complete one island to unlock the next</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon c">⌨️</div>
+        <div>
+          <h4>Monaco Code Editor</h4>
+          <p>Full VS Code–grade editor in the browser — write real Rust &amp; Anchor, get instant feedback</p>
+        </div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon p">🏅</div>
+        <div>
+          <h4>On-chain NFT Badge</h4>
+          <p>Finish a course → mint a Metaplex Core NFT as verifiable proof of completion</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 4 — USE CASE ═══ -->
+<section class="slide slide-usecase" id="slide-4">
+  <span class="slide-label">User Journey</span>
+  <h2 class="section-title reveal">From zero to on-chain in one session</h2>
+  <p class="subtitle reveal d1">No local setup. No friction. Just connect a wallet and sail.</p>
+
+  <div class="journey reveal d2">
+    <div class="j-step">
+      <div class="j-circle">🦊</div>
+      <h4>Connect Wallet</h4>
+      <p>Phantom, Backpack or Solflare — 30 seconds to start</p>
+    </div>
+    <div class="j-step">
+      <div class="j-circle">🗺️</div>
+      <h4>Choose Island</h4>
+      <p>Crab Forge (Rust basics) or Anchor Harbor (smart contracts)</p>
+    </div>
+    <div class="j-step">
+      <div class="j-circle">⌨️</div>
+      <h4>Write Code</h4>
+      <p>Fill-the-blank exercises with real-time auto-validation</p>
+    </div>
+    <div class="j-step">
+      <div class="j-circle">✅</div>
+      <h4>Pass &amp; Unlock</h4>
+      <p>Audio cue + progress bar + next lesson auto-unlocks</p>
+    </div>
+    <div class="j-step">
+      <div class="j-circle">🏅</div>
+      <h4>Mint Badge</h4>
+      <p>Real devnet tx — NFT in your wallet as proof of skill</p>
+    </div>
+  </div>
+
+  <div class="persona reveal d3">
+    <p><span class="name">Alex, a Python dev</span>, knew nothing about Solana on Monday. By Friday he'd minted his first on-chain NFT badge — and understood every line of code that made it happen.</p>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 5 — TRACTION ═══ -->
+<section class="slide slide-traction" id="slide-5">
+  <span class="slide-label">Traction</span>
+  <h2 class="section-title reveal">MVP shipped. In 2 weeks. Solo.</h2>
+  <p class="subtitle reveal d1">Next.js · Anchor · Metaplex Core · Vercel — zero compromises on the stack</p>
+
+  <div class="traction-nums reveal d2">
+    <div class="t-card gc glass">
+      <div class="tn">12</div>
+      <div class="tl">Interactive<br>lessons</div>
+    </div>
+    <div class="t-card cc glass">
+      <div class="tn">2</div>
+      <div class="tl">Fully gated<br>islands</div>
+    </div>
+    <div class="t-card grc glass">
+      <div class="tn">21</div>
+      <div class="tl">Static pages<br>deployed</div>
+    </div>
+    <div class="t-card pc glass">
+      <div class="tn">100%</div>
+      <div class="tl">On-chain txs<br>confirmed live</div>
+    </div>
+  </div>
+
+  <div class="reveal d3" style="text-align:center;">
+    <div class="live-pill">
+      <div class="live-dot"></div>
+      LIVE ON VERCEL
+    </div>
+    <p class="live-url">course-eight-plum.vercel.app</p>
+
+    <div class="traction-tech" style="margin-top:16px;">
+      <span class="tech-tag">Next.js 16</span>
+      <span class="tech-tag">Anchor</span>
+      <span class="tech-tag">Metaplex Core</span>
+      <span class="tech-tag">Monaco Editor</span>
+      <span class="tech-tag">@solana/kit</span>
+      <span class="tech-tag">Vercel</span>
+    </div>
+
+    <p class="hackathon-note" style="margin-top:14px;">
+      🏆 Colosseum Hackathon · Consumer / Education Track · Deadline Apr 30, 2026
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 6 — WHY NOW ═══ -->
+<section class="slide slide-whynow" id="slide-6">
+  <span class="slide-label">Why Now</span>
+  <h2 class="section-title reveal">Three forces are converging. Right now.</h2>
+  <p class="subtitle reveal d1">Miss this window and someone else builds it</p>
+
+  <div class="whynow-grid reveal d2">
+    <div class="wn-card glass">
+      <div class="icon">📈</div>
+      <h4>Solana is exploding</h4>
+      <p><span class="hl">+29% YoY</span> developer growth (Electric Capital). 17,700 active builders — the ecosystem needs talent faster than traditional education can supply it.</p>
+    </div>
+    <div class="wn-card glass">
+      <div class="icon">🏛️</div>
+      <h4>Foundation funds education</h4>
+      <p>Solana Foundation actively grants <span class="hl">$10k–$50k</span> to education projects. A freeCodeCamp Solana course already received one. We're more interactive, more engaging, better.</p>
+    </div>
+    <div class="wn-card glass">
+      <div class="icon">🤖</div>
+      <h4>AI made solo shipping real</h4>
+      <p>Claude Code CLI + modern AI tooling means <span class="hl">one developer</span> can ship what used to take a team of five — in two weeks instead of six months.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 7 — WHY YOU (TEAM) ═══ -->
+<section class="slide slide-team" id="slide-7">
+  <span class="slide-label">The Founder</span>
+  <h2 class="section-title reveal">Why me? I learned it the hard way.</h2>
+  <p class="subtitle reveal d1">And I'm building what I wish had existed when I started.</p>
+
+  <div class="founder-wrap glass reveal d2">
+    <!-- Swap emoji for your photo: <img class="avatar" src="art/founder.jpg" alt="Alex"> -->
+    <div class="avatar">🏴‍☠️</div>
+
+    <div class="founder-info">
+      <h3>Alex</h3>
+      <p class="founder-role">Founder · Python Developer · Web3 Automation Engineer</p>
+
+      <ul class="creds">
+        <li>In crypto since <strong>2022</strong> — retrodrops, Web3 sales, deep ecosystem intuition</li>
+        <li>Python developer at <strong>peanut.trade</strong> for 1.5 years — shipping real Web3 product used by real users</li>
+        <li><strong>Ethereum hackathon prize winner</strong> — proven ability to build &amp; ship under pressure</li>
+        <li>Web3 automation specialist since 2024 — complex bots, pipelines, on-chain scripts</li>
+        <li>AI power-user: <strong>Claude Code CLI, Codex CLI</strong> — ships full apps solo, end-to-end</li>
+      </ul>
+
+      <blockquote class="f-quote">
+        "I spent weeks drowning in Solana docs before anything clicked. I built Pirate Academy so the next developer can go from zero to on-chain in a single session — and actually enjoy it."
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 8 — ROADMAP ═══ -->
+<section class="slide slide-roadmap" id="slide-8">
+  <span class="slide-label">Roadmap</span>
+  <h2 class="section-title reveal">Charting the course</h2>
+  <p class="subtitle reveal d1">From hackathon MVP to self-sustaining education platform</p>
+
+  <div class="roadmap reveal d2">
+    <div class="r-phase">
+      <div class="r-dot q2">🏴‍☠️</div>
+      <div class="r-label q2">Q2 2026</div>
+      <h4>Launch</h4>
+      <ul class="r-items">
+        <li>Colosseum submission</li>
+        <li>Foundation grant apply</li>
+        <li>Public launch</li>
+        <li>First 100 students</li>
+      </ul>
+    </div>
+    <div class="r-phase">
+      <div class="r-dot q3">⚡</div>
+      <div class="r-label q3">Q3 2026</div>
+      <h4>Grow</h4>
+      <ul class="r-items">
+        <li>Island 3: DeFi protocols</li>
+        <li>Freemium model live</li>
+        <li>AI Captain tutor</li>
+        <li>First paying users</li>
+      </ul>
+    </div>
+    <div class="r-phase">
+      <div class="r-dot q4">🏛️</div>
+      <div class="r-label q4">Q4 2026</div>
+      <h4>Scale</h4>
+      <ul class="r-items">
+        <li>Island 4: Token Extensions</li>
+        <li>B2B bootcamp pilots</li>
+        <li>Mainnet badge minting</li>
+        <li>MRR positive</li>
+      </ul>
+    </div>
+    <div class="r-phase">
+      <div class="r-dot y27">🌊</div>
+      <div class="r-label y27">2027</div>
+      <h4>Expand</h4>
+      <ul class="r-items">
+        <li>Mobile app</li>
+        <li>Community leaderboard</li>
+        <li>Multi-chain support</li>
+        <li>Enterprise licensing</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 9 — REVENUE MODEL ═══ -->
+<section class="slide slide-revenue" id="slide-9">
+  <span class="slide-label">Business Model</span>
+  <h2 class="section-title reveal">Three revenue streams, zero vendor lock-in</h2>
+  <p class="subtitle reveal d1">Start with grants · grow through subscriptions · scale via B2B</p>
+
+  <div class="rev-grid reveal d2">
+    <div class="rev-card glass" style="border:1px solid rgba(201,162,39,0.18);">
+      <div class="icon">🏛️</div>
+      <h4>Foundation Grants</h4>
+      <p>Solana Foundation actively funds education. We apply immediately post-hackathon with a live product and real users.</p>
+      <div class="price" style="color:var(--gold);">$10k–$50k</div>
+    </div>
+    <div class="rev-card glass" style="border:1px solid rgba(167,139,250,0.18);">
+      <div class="icon">🔓</div>
+      <h4>Freemium Subscription</h4>
+      <p>Islands 1–2 free forever. Advanced islands (DeFi, Token Extensions, real mainnet txs) behind a subscription.</p>
+      <div class="price" style="color:var(--purple);">$9 / month</div>
+    </div>
+    <div class="rev-card glass" style="border:1px solid rgba(34,211,238,0.18);">
+      <div class="icon">🏢</div>
+      <h4>B2B Licenses</h4>
+      <p>Bootcamps and universities buy cohort access. Market precedents: Buildspace, RiseIn, Encode Club.</p>
+      <div class="price" style="color:var(--cyan);">$500–$2k / cohort</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 10 — END / CTA ═══ -->
+<section class="slide slide-end" id="slide-10">
+  <div class="orb" style="width:500px;height:500px;background:var(--gold);top:20%;left:20%;"></div>
+  <div class="orb" style="width:350px;height:350px;background:var(--cyan);bottom:20%;right:15%;"></div>
+
+  <img class="end-badge reveal" src="art/badge.png" alt="Pirate Academy Badge">
+  <h1 class="headline reveal d1">JOIN THE CREW</h1>
+
+  <p class="end-quote reveal d2">
+    The best developers don't just <span>read</span> about Solana.<br>
+    They <span>sail</span> it.
+  </p>
+
+  <div class="end-links reveal d3">
+    <a href="https://course-eight-plum.vercel.app" class="end-link primary" target="_blank">⚓ Try the Demo</a>
+    <a href="mailto:Alex.enrout.invest@gmail.com" class="end-link secondary">📨 Get in Touch</a>
+  </div>
+
+  <div class="colosseum-tag reveal d4">
+    🏆 Colosseum Hackathon · Consumer / Education · April 2026
+  </div>
+</section>
+
+
+<script>
+/* ── Particle canvas ── */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let pts = [];
+
+function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+
+function mkPts() {
+  pts = Array.from({length: 90}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.4 + 0.3,
+    vx: (Math.random() - 0.5) * 0.25,
+    vy: (Math.random() - 0.5) * 0.25,
+    a: Math.random() * 0.5 + 0.08,
+    c: Math.random() > 0.55 ? '#c9a227' : (Math.random() > 0.5 ? '#22d3ee' : '#a78bfa'),
+  }));
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (const p of pts) {
+    p.x = (p.x + p.vx + canvas.width) % canvas.width;
+    p.y = (p.y + p.vy + canvas.height) % canvas.height;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.c;
+    ctx.globalAlpha = p.a;
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(draw);
+}
+
+resize(); mkPts(); draw();
+window.addEventListener('resize', () => { resize(); mkPts(); });
+
+/* ── Nav ── */
+const slides = document.querySelectorAll('.slide');
+const dots   = document.querySelectorAll('.dot');
+
+function goTo(i) { slides[i]?.scrollIntoView({behavior: 'smooth'}); }
+
+function activeDot() {
+  let cur = 0;
+  const mid = scrollY + innerHeight / 2;
+  slides.forEach((s, i) => { if (s.offsetTop <= mid) cur = i; });
+  dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+}
+
+window.addEventListener('scroll', activeDot, {passive: true});
+activeDot();
+
+/* ── Keyboard ── */
+window.addEventListener('keydown', e => {
+  let cur = 0;
+  slides.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight / 2) cur = i; });
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') goTo(Math.min(cur + 1, slides.length - 1));
+  if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  goTo(Math.max(cur - 1, 0));
+});
+
+/* ── Reveal on scroll ── */
+const obs = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.12 }
+);
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
