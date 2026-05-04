@@ -2,11 +2,13 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add an AI onboarding modal to the homepage — Claude asks 5 questions, assesses the student's level, and recommends a personalized starting point in the course.
+**Goal:** Add an AI onboarding modal to the homepage — AI asks 5 questions, assesses the student's level, and recommends a personalized starting point in the course.
 
-**Architecture:** User visits homepage → if no onboarding data in localStorage → modal opens automatically → chat with Claude (5 Q&A turns) → Claude returns a structured recommendation → recommendation saved to localStorage → CTA button on homepage updated to point to recommended island/lesson.
+**Architecture:** User visits homepage → if no onboarding data in localStorage → modal opens automatically → chat with AI (5 Q&A turns) → AI returns a structured recommendation → recommendation saved to localStorage → CTA button on homepage updated to point to recommended island/lesson.
 
-**Tech Stack:** Next.js 16 App Router, `@anthropic-ai/sdk`, TypeScript, Tailwind CSS, localStorage.
+**Tech Stack:** Next.js 16 App Router, `groq-sdk`, TypeScript, Tailwind CSS, localStorage.
+
+> **AI Provider note:** Currently using Groq (`llama-3.1-8b-instant`) — free tier, fast, sufficient for onboarding Q&A. After the hackathon, migrate to Claude (`claude-haiku-4-5-20251001`) or Codex depending on which model offers the best quality/cost ratio at the time. The API route is isolated in `app/api/onboarding/route.ts` — swapping providers requires changing only that file and the env var.
 
 ---
 
@@ -14,16 +16,16 @@
 
 | Action | Path | Responsibility |
 |--------|------|----------------|
-| Create | `app/api/onboarding/route.ts` | POST endpoint — calls Claude, returns text response |
+| Create | `app/api/onboarding/route.ts` | POST endpoint — calls Groq, returns text response |
 | Create | `app/lib/onboarding.ts` | localStorage read/write + recommendation parser |
 | Create | `app/components/onboarding/OnboardingModal.tsx` | Chat UI modal — 5 questions flow |
 | Modify | `app/page.tsx` | Mount modal for first-time visitors |
 | Modify | `app/components/HeroSection.tsx` | Use onboarding result to personalize CTA |
-| Create | `.env.local` | `ANTHROPIC_API_KEY=` (empty, user fills in) |
+| Create | `.env.local` | `GROQ_API_KEY=` (empty, user fills in) |
 
 ---
 
-## Task 1: Install Anthropic SDK
+## Task 1: Install Groq SDK
 
 **Files:**
 - Modify: `package.json`
@@ -32,19 +34,19 @@
 - [ ] **Step 1: Install SDK**
 
 ```bash
-cd /home/alex/claude/projects/solana/course && pnpm add @anthropic-ai/sdk
+cd /home/alex/claude/projects/solana/course && pnpm add groq-sdk
 ```
 
-Expected output: `+ @anthropic-ai/sdk` added to dependencies.
+Expected output: `+ groq-sdk` added to dependencies.
 
 - [ ] **Step 2: Create .env.local**
 
 Create file `/home/alex/claude/projects/solana/course/.env.local`:
 ```
-ANTHROPIC_API_KEY=
+GROQ_API_KEY=
 ```
 
-> User must fill in their Anthropic API key before running the app.
+> User must fill in their Groq API key from console.groq.com before running the app.
 
 - [ ] **Step 3: Verify .env.local is gitignored**
 
@@ -61,7 +63,7 @@ echo ".env.local" >> /home/alex/claude/projects/solana/course/.gitignore
 
 ```bash
 git add package.json pnpm-lock.yaml .gitignore
-git commit -m "feat: add @anthropic-ai/sdk dependency"
+git commit -m "feat: add groq-sdk dependency for AI onboarding"
 ```
 
 ---
@@ -136,10 +138,15 @@ git commit -m "feat: add onboarding localStorage helpers + recommendation parser
 - [ ] **Step 1: Create `app/api/onboarding/route.ts`**
 
 ```ts
-import Anthropic from "@anthropic-ai/sdk";
+import Groq from "groq-sdk";
 import { NextResponse } from "next/server";
 
-const anthropic = new Anthropic();
+// AI Provider: Groq (llama-3.1-8b-instant) — free tier for hackathon demo.
+// To migrate to Claude: replace Groq client with Anthropic client,
+// change model to "claude-haiku-4-5-20251001", rename GROQ_API_KEY → ANTHROPIC_API_KEY.
+// To migrate to Codex: use OpenAI client with model "codex-mini-latest".
+// Only this file needs to change — the rest of the app is provider-agnostic.
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const SYSTEM_PROMPT = `You are a friendly guide for Pirate Academy — an interactive Solana developer course.
 Your job: ask the student exactly 5 questions to assess their level, one at a time.
@@ -176,15 +183,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "messages required" }, { status: 400 });
   }
 
-  const response = await anthropic.messages.create({
-    model: "claude-haiku-4-5-20251001",
+  const response = await groq.chat.completions.create({
+    model: "llama-3.1-8b-instant",
     max_tokens: 500,
-    system: SYSTEM_PROMPT,
-    messages,
+    messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
   });
 
-  const text =
-    response.content[0]?.type === "text" ? response.content[0].text : "";
+  const text = response.choices[0]?.message?.content ?? "";
 
   return NextResponse.json({ text });
 }
@@ -193,18 +198,18 @@ export async function POST(req: Request) {
 - [ ] **Step 2: Verify the API key is set**
 
 ```bash
-grep "ANTHROPIC_API_KEY" /home/alex/claude/projects/solana/course/.env.local
+grep "GROQ_API_KEY" /home/alex/claude/projects/solana/course/.env.local
 ```
 
-Expected: `ANTHROPIC_API_KEY=sk-ant-...` (non-empty value).
+Expected: `GROQ_API_KEY=gsk_...` (non-empty value).
 
-> If empty — ask the user to fill in `.env.local` before proceeding.
+> If empty — ask the user to fill in `.env.local` with their key from console.groq.com before proceeding.
 
 - [ ] **Step 3: Commit**
 
 ```bash
 git add app/api/onboarding/route.ts
-git commit -m "feat: add AI onboarding API route (Claude Haiku)"
+git commit -m "feat: add AI onboarding API route (Groq llama-3.1-8b-instant)"
 ```
 
 ---
@@ -239,7 +244,6 @@ export function OnboardingModal({ onComplete, onSkip }: Props) {
   const [recommendation, setRecommendation] = useState<OnboardingResult | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // Kick off with Claude's first question on mount
   useEffect(() => {
     void sendMessage(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -296,7 +300,6 @@ export function OnboardingModal({ onComplete, onSkip }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
       <div className="w-full max-w-lg bg-[#0d1829] border border-amber-500/20 rounded-2xl flex flex-col overflow-hidden shadow-2xl">
-        {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-amber-500/10">
           <span className="text-amber-500 font-black text-sm tracking-[3px] uppercase">
             ⚓ Chart Your Course
@@ -309,7 +312,6 @@ export function OnboardingModal({ onComplete, onSkip }: Props) {
           </button>
         </div>
 
-        {/* Messages */}
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3 min-h-[280px] max-h-[380px]">
           {messages.map((m, i) => (
             <div
@@ -338,7 +340,6 @@ export function OnboardingModal({ onComplete, onSkip }: Props) {
           <div ref={bottomRef} />
         </div>
 
-        {/* Recommendation CTA */}
         {recommendation && (
           <div className="px-5 py-4 border-t border-amber-500/10 bg-amber-500/5">
             <p className="text-xs text-amber-400 mb-3">{recommendation.message}</p>
@@ -351,7 +352,6 @@ export function OnboardingModal({ onComplete, onSkip }: Props) {
           </div>
         )}
 
-        {/* Input */}
         {!recommendation && (
           <form
             onSubmit={handleSubmit}
@@ -480,41 +480,31 @@ function RewardSection() {
 }
 ```
 
-- [ ] **Step 2: Update `app/components/HeroSection.tsx` to accept onboarding result**
+- [ ] **Step 2: Update `app/components/HeroSection.tsx`**
 
-Replace the `HeroSection` function signature and CTA logic. Find this section in `app/components/HeroSection.tsx`:
-
-```tsx
-export function HeroSection() {
-  const { signer } = useWallet();
-  const client = useSolanaClient();
-
-  const [crewName, setCrewName] = useState<string | null>(null);
-  const [next, setNext] = useState<{ island: string; slot: string; title: string } | null>(null);
-  const [totalDone, setTotalDone] = useState(0);
-  const [mounted, setMounted] = useState(false);
-```
-
-Replace with:
+Add import at the top of the file (after existing imports):
 
 ```tsx
 import type { OnboardingResult } from "@/lib/onboarding";
+```
 
+Replace the function signature:
+
+```tsx
+export function HeroSection() {
+```
+
+With:
+
+```tsx
 interface HeroProps {
   onboardingResult?: OnboardingResult | null;
 }
 
 export function HeroSection({ onboardingResult }: HeroProps) {
-  const { signer } = useWallet();
-  const client = useSolanaClient();
-
-  const [crewName, setCrewName] = useState<string | null>(null);
-  const [next, setNext] = useState<{ island: string; slot: string; title: string } | null>(null);
-  const [totalDone, setTotalDone] = useState(0);
-  const [mounted, setMounted] = useState(false);
 ```
 
-Then find and replace the CTA href/label logic:
+Replace the CTA logic:
 
 ```tsx
   const hasStarted = mounted && totalDone > 0;
@@ -527,7 +517,7 @@ Then find and replace the CTA href/label logic:
   const isReturning = hasStarted;
 ```
 
-Replace with:
+With:
 
 ```tsx
   const hasStarted = mounted && totalDone > 0;
@@ -547,13 +537,13 @@ Replace with:
 cd /home/alex/claude/projects/solana/course && pnpm dev
 ```
 
-Open `http://localhost:3000` in browser. Expected:
+Open `http://localhost:3000`. Expected:
 - Onboarding modal appears automatically for first-time visitor
-- Claude asks first question
-- User can type answer and get next question
-- After 5 questions, recommendation appears with "Begin the Voyage →" button
-- Clicking it navigates to the recommended island/lesson
-- Refreshing the page — modal does NOT appear again (result in localStorage)
+- AI asks first question in pirate style
+- User types answer → next question appears
+- After 5 questions → recommendation with "Begin the Voyage →" button
+- Clicking navigates to the recommended island/lesson
+- Refreshing — modal does NOT appear again
 - Clearing localStorage and refreshing — modal appears again
 
 - [ ] **Step 4: Commit**
@@ -569,13 +559,14 @@ git commit -m "feat: wire AI onboarding modal into homepage with personalized CT
 
 **Spec coverage:**
 - ✅ AI onboarding modal opens for first-time visitors
-- ✅ Claude asks 5 questions one at a time
+- ✅ AI asks 5 questions one at a time
 - ✅ Recommendation based on level (beginner → crab-forge/01, intermediate → anchor-harbor/01)
 - ✅ Result saved to localStorage — modal doesn't re-appear
 - ✅ Homepage CTA updated to point to recommended start
 - ✅ Skip option for users who don't want onboarding
+- ✅ Provider swap documented — only `route.ts` needs to change
 
 **Not in scope (Plan 2):**
 - AI tutor inside lesson pages
 - Company portal / B2B
-- Streaming responses (non-streaming is sufficient for short Q&A)
+- Streaming responses
