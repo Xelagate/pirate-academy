@@ -1,9 +1,6 @@
 # Pirate Academy — Progress
 
-**Plan:** `/home/alex/.claude/plans/imperative-noodling-haven.md`
-**Deadline:** 2026-04-30 (Colosseum hackathon)
-
-## Current Status: Day 4
+## Current Status: Day 13
 
 ## ✅ Day 1 — Scaffold
 - `create-solana-dapp@4.8.4` template `nextjs-anchor` deployed
