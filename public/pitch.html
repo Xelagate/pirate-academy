@@ -1203,21 +1203,46 @@ window.addEventListener('keydown', e => {
 const achPopup = document.getElementById('ach-popup');
 const achBarFill = document.getElementById('ach-bar-fill');
 let achShown = false;
+const isRecording = new URLSearchParams(location.search).get('record') === 'true';
 
-const achObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting && !achShown) {
-      achShown = true;
-      setTimeout(() => {
-        achPopup.classList.add('show');
-        setTimeout(() => { achBarFill.style.width = '100%'; }, 50);
-        setTimeout(() => { achPopup.classList.remove('show'); }, 4200);
-      }, 1200);
+if (!isRecording) {
+  const achObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !achShown) {
+        achShown = true;
+        setTimeout(() => {
+          achPopup.classList.add('show');
+          setTimeout(() => { achBarFill.style.width = '100%'; }, 50);
+          setTimeout(() => { achPopup.classList.remove('show'); }, 4200);
+        }, 1200);
+      }
+    });
+  }, { threshold: 0.5 });
+  achObs.observe(document.getElementById('slide-4'));
+}
+
+// Auto-advance mode
+const SLIDE_DURATIONS = [8,11,8,16,7,8,10,2,2,2,13];
+const autoBtn = document.getElementById('auto-btn');
+if (autoBtn) {
+  autoBtn.addEventListener('click', async () => {
+    autoBtn.style.display = 'none';
+    for (let i = 0; i < SLIDE_DURATIONS.length; i++) {
+      const el = document.getElementById(`slide-${i}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      await new Promise(r => setTimeout(r, SLIDE_DURATIONS[i] * 1000));
     }
   });
-}, { threshold: 0.5 });
-
-achObs.observe(document.getElementById('slide-4'));
+}
 </script>
+
+<div id="auto-btn" style="
+  position: fixed; bottom: 32px; right: 32px; z-index: 9999;
+  background: #c9a227; color: #0a0a0f; font-family: 'Pirata One', cursive;
+  font-size: 22px; padding: 14px 28px; border-radius: 8px; cursor: pointer;
+  border: none; box-shadow: 0 4px 20px rgba(201,162,39,0.5);
+  letter-spacing: 1px; user-select: none;
+">▶ СТАРТ</div>
+
 </body>
 </html>
