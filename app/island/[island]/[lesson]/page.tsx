@@ -34,7 +34,30 @@ export default async function LessonPage({ params }: Params) {
   const nextLesson = islandData.lessons[lessonIndex + 1] ?? null;
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-12">
+    <div className="relative min-h-screen" style={{ background: "#060d1a" }}>
+      {island === "crab-forge" && (
+        <>
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/art/crab_island.png')", opacity: 0.13 }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(6,13,26,0.2) 0%, rgba(6,13,26,0.7) 60%, #060d1a 100%)" }} />
+        </>
+      )}
+      {island === "anchor-harbor" && (
+        <>
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/art/anchor-island.png')", opacity: 0.13 }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(6,13,26,0.2) 0%, rgba(6,13,26,0.7) 60%, #060d1a 100%)" }} />
+        </>
+      )}
+    <div className="relative z-10 mx-auto max-w-2xl px-6 py-12">
+      <div className="mb-8 overflow-hidden rounded-2xl border border-amber-500/10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`/art/${island}.png`}
+          alt={islandData.title}
+          className="w-full object-cover"
+          style={{ maxHeight: "200px", objectPosition: "center 30%" }}
+        />
+      </div>
+
       <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
         <a
           href={`/island/${island}`}
@@ -71,6 +94,7 @@ export default async function LessonPage({ params }: Params) {
         prevSlot={prevLesson?.slot ?? null}
         nextSlot={nextLesson?.slot ?? null}
       />
+    </div>
     </div>
   );
 }

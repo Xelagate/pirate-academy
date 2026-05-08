@@ -105,10 +105,8 @@ export function HeroSection() {
           <br />
           Academy
         </h1>
-        <p className="text-slate-400 text-lg max-w-md leading-relaxed mb-10">
-          Write real Rust. Deploy real Anchor programs.
-          <br />
-          Mint your proof on Solana devnet.
+        <p className="text-slate-400 text-base max-w-sm leading-relaxed mb-10">
+          No local setup. From zero to on-chain — in one session.
         </p>
 
         <div className="flex flex-col items-center gap-3">

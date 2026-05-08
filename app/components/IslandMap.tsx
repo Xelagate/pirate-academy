@@ -75,7 +75,18 @@ export function IslandMap() {
   const anchorLocked = !crabComplete;
 
   return (
-    <section id="islands" className="py-20 px-6 max-w-3xl mx-auto">
+    <section id="islands" className="relative py-20 px-6 overflow-hidden">
+      {/* Pirate map background */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/art/map.png')", opacity: 0.07 }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{ background: "linear-gradient(to bottom, #060d1a 0%, transparent 20%, transparent 80%, #060d1a 100%)" }}
+      />
+
+      <div className="relative z-10 max-w-3xl mx-auto">
       <p className="text-[10px] font-bold tracking-[4px] text-amber-500 mb-2 uppercase">
         Archipelago
       </p>
@@ -117,6 +128,7 @@ export function IslandMap() {
             <p className="text-[10px] text-slate-700 mt-1">Coming soon</p>
           </div>
         ))}
+      </div>
       </div>
     </section>
   );
