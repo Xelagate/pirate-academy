@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teleprompter — Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    color: #fff;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  #scroll-container {
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #text {
+    padding: 12vh 0 90vh;
+    line-height: 1.9;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 0.04em;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .line {
+    display: block;
+    padding: 4px 0;
+    transition: color 0.3s;
+    color: #aaa;
+  }
+
+  .line.active { color: #fff; }
+  .line.dim { color: #444; }
+  .line.cue {
+    color: #f59e0b;
+    font-size: 28px;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+
+  .spacer { display: block; height: 40px; }
+
+  #controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.85);
+    border-top: 1px solid #222;
+    padding: 14px 30px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+  }
+
+  button {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 10px 22px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+  }
+
+  button:hover { background: #333; }
+  button.active { background: #9945FF; border-color: #9945FF; }
+
+  #speed-label {
+    color: #888;
+    font-size: 14px;
+    margin-left: auto;
+  }
+
+  input[type=range] {
+    width: 140px;
+    accent-color: #9945FF;
+  }
+
+  #progress {
+    color: #555;
+    font-size: 13px;
+    min-width: 50px;
+    text-align: right;
+  }
+
+  #fade-top {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 10vh;
+    background: linear-gradient(to bottom, #000 30%, transparent);
+    pointer-events: none;
+    z-index: 5;
+  }
+  #fade-bottom {
+    position: fixed;
+    bottom: 56px; left: 0; right: 0;
+    height: 50vh;
+    background: linear-gradient(to top, #000 50%, transparent);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  #crosshair {
+    position: fixed;
+    top: 12vh;
+    left: 0; right: 0;
+    height: 2px;
+    background: rgba(153, 69, 255, 0.25);
+    pointer-events: none;
+    z-index: 6;
+  }
+</style>
+</head>
+<body>
+
+<div id="fade-top"></div>
+<div id="fade-bottom"></div>
+<div id="crosshair"></div>
+
+<div id="scroll-container">
+  <div id="text">
+
+    <span class="line">AHOY.</span>
+    <span class="line">LET ME SHOW YOU HOW THIS WORKS.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[SHOW LANDING PAGE]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">THIS IS PIRATE ACADEMY —</span>
+    <span class="line">A SOLANA LEARNING PLATFORM.</span>
+    <span class="line">YOUR WALLET IS YOUR IDENTITY.</span>
+    <span class="line">NO ACCOUNT. NO PASSWORD.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[CONNECT WALLET → OPEN /onboard]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">YOUR AI CAPTAIN</span>
+    <span class="line">ASKS YOU FIVE QUESTIONS.</span>
+    <span class="line">YOUR BACKGROUND. YOUR GOAL. YOUR TIME.</span>
+    <span class="line">BASED ON YOUR ANSWERS —</span>
+    <span class="line">IT CHARTS YOUR ROUTE.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[SHOW AI STREAMING RESPONSE]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">THIRTY SECONDS.</span>
+    <span class="line">PERSONALIZED CURRICULUM.</span>
+    <span class="line">POWERED BY CLAUDE API —</span>
+    <span class="line">STREAMING IN REAL TIME.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[SWITCH TO ISLAND MAP]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">THESE ARE YOUR ISLANDS.</span>
+    <span class="line">CRAB FORGE: RUST FUNDAMENTALS.</span>
+    <span class="line">ANCHOR HARBOR: REAL ON-CHAIN PROGRAMS.</span>
+    <span class="line">TEN LESSONS DONE. TWO LEFT.</span>
+    <span class="line">LET'S FINISH THIS.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[ENTER ANCHOR HARBOR → LESSON 4]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">THIS IS WHAT A LESSON LOOKS LIKE.</span>
+    <span class="line">REAL RUST. REAL ANCHOR CODE.</span>
+    <span class="line">IN THE BROWSER —</span>
+    <span class="line">NO LOCAL SETUP. ZERO INSTALL.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[SOLVE LESSON — TYPE CODE, HIT RUN]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">YOU HIT RUN.</span>
+    <span class="line">INSTANT FEEDBACK.</span>
+    <span class="line">THE VALIDATOR CHECKS YOUR ANCHOR STRUCTS,</span>
+    <span class="line">YOUR ACCOUNT CONSTRAINTS.</span>
+    <span class="line">EXACTLY WHAT'S WRONG AND WHY.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[COMPLETE → OPEN LESSON 5]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">ONE MORE.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[SOLVE LESSON 5 — DROP ANCHOR]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[ISLAND COMPLETE → MINT SCREEN]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">ISLAND COMPLETE.</span>
+    <span class="line">NOW THE IMPORTANT PART.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[CLICK MINT BADGE]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">THIS CALLS AN ANCHOR PROGRAM</span>
+    <span class="line">DEPLOYED ON SOLANA DEVNET.</span>
+    <span class="line">IT MINTS AN SBT —</span>
+    <span class="line">A SOULBOUND TOKEN.</span>
+    <span class="line">NON-TRANSFERABLE. PERMANENTLY FROZEN.</span>
+    <span class="line">METAPLEX CORE CPI UNDER THE HOOD.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">[SHOW BADGE IN WALLET / EXPLORER]</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">ON-CHAIN. IN YOUR WALLET.</span>
+    <span class="line">PROOF THAT YOU ACTUALLY SHIPPED —</span>
+    <span class="line">NOT JUST WATCHED A VIDEO.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">FRAMEWORK FIRST —</span>
+    <span class="line">WALLET AUTH, AI ROUTING,</span>
+    <span class="line">ON-CHAIN VERIFICATION,</span>
+    <span class="line">IN-BROWSER EDITOR.</span>
+    <span class="line">ALL LIVE. ALL WORKING.</span>
+    <span class="line">CONTENT SCALES FROM HERE.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">REAL CODE. ON-CHAIN PROOF.</span>
+    <span class="line">THAT'S PIRATE ACADEMY.</span>
+
+  </div>
+</div>
+
+<div id="controls">
+  <button id="btn-play" class="active" onclick="togglePlay()">▶ СТАРТ</button>
+  <button onclick="reset()">↺ СБРОС</button>
+  <span id="speed-label">Скорость:</span>
+  <input type="range" id="speed" min="0.2" max="6" step="0.1" value="1">
+  <span id="speed-val">1.0×</span>
+  <span id="progress">0%</span>
+</div>
+
+<script>
+  const container = document.getElementById('scroll-container');
+  const text = document.getElementById('text');
+  const lines = document.querySelectorAll('.line');
+  const speedInput = document.getElementById('speed');
+  const speedVal = document.getElementById('speed-val');
+  const progressEl = document.getElementById('progress');
+  const btnPlay = document.getElementById('btn-play');
+
+  let scrollY = 0;
+  let playing = false;
+  let raf = null;
+  const BASE_SPEED = 0.6;
+
+  function getSpeed() { return parseFloat(speedInput.value); }
+
+  speedInput.addEventListener('input', () => {
+    speedVal.textContent = parseFloat(speedInput.value).toFixed(1) + '×';
+  });
+
+  function step() {
+    if (!playing) return;
+    scrollY += BASE_SPEED * getSpeed();
+    const maxScroll = text.offsetHeight - window.innerHeight;
+    if (scrollY >= maxScroll) {
+      scrollY = maxScroll;
+      playing = false;
+      btnPlay.textContent = '▶ СТАРТ';
+      btnPlay.classList.remove('active');
+    }
+    container.scrollTop = scrollY;
+    updateHighlight();
+    updateProgress(maxScroll);
+    raf = requestAnimationFrame(step);
+  }
+
+  function updateHighlight() {
+    const topY = container.scrollTop + window.innerHeight * 0.12;
+    let closest = null, closestDist = Infinity;
+    lines.forEach(line => {
+      const rect = line.getBoundingClientRect();
+      const absTop = rect.top + container.scrollTop;
+      const dist = Math.abs(absTop + rect.height / 2 - topY);
+      if (dist < closestDist) { closestDist = dist; closest = line; }
+    });
+    lines.forEach(line => {
+      line.classList.remove('active', 'dim');
+      if (line === closest) line.classList.add('active');
+    });
+  }
+
+  function updateProgress(maxScroll) {
+    const pct = maxScroll > 0 ? Math.round((scrollY / maxScroll) * 100) : 0;
+    progressEl.textContent = pct + '%';
+  }
+
+  function togglePlay() {
+    playing = !playing;
+    if (playing) {
+      btnPlay.textContent = '⏸ ПАУЗА';
+      btnPlay.classList.add('active');
+      raf = requestAnimationFrame(step);
+    } else {
+      btnPlay.textContent = '▶ СТАРТ';
+      btnPlay.classList.remove('active');
+      cancelAnimationFrame(raf);
+    }
+  }
+
+  function reset() {
+    playing = false;
+    cancelAnimationFrame(raf);
+    scrollY = 0;
+    container.scrollTop = 0;
+    btnPlay.textContent = '▶ СТАРТ';
+    btnPlay.classList.remove('active');
+    progressEl.textContent = '0%';
+    lines.forEach(l => l.classList.remove('active', 'dim'));
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+    if (e.code === 'ArrowUp') speedInput.value = Math.min(6, getSpeed() + 0.1).toFixed(1);
+    if (e.code === 'ArrowDown') speedInput.value = Math.max(0.2, getSpeed() - 0.1).toFixed(1);
+    speedVal.textContent = getSpeed().toFixed(1) + '×';
+    if (e.code === 'KeyR') reset();
+  });
+</script>
+</body>
+</html>
