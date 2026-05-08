@@ -91,6 +91,13 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 .d3 { transition-delay: 0.3s; } .d4 { transition-delay: 0.4s; }
 .d5 { transition-delay: 0.5s; } .d6 { transition-delay: 0.6s; }
 
+/* ── AI glow ── */
+.ai-glow {
+  color: #c9a227;
+  text-shadow: 0 0 12px rgba(201,162,39,0.75), 0 0 32px rgba(201,162,39,0.35);
+  font-weight: 700;
+}
+
 
 /* ══════════════════════════════════════
    SLIDE 0 — HERO
@@ -355,7 +362,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 .avatar {
   width: 150px; height: 150px; border-radius: 50%; flex-shrink: 0;
   border: 3px solid var(--gold); box-shadow: 0 0 40px rgba(201,162,39,0.3);
-  object-fit: cover; object-position: center 10%;
+  object-fit: cover;
   display: flex; align-items: center; justify-content: center;
   font-size: 4.5rem; background: linear-gradient(135deg, #1a2a4a, #0d1530); overflow: hidden;
 }
@@ -437,6 +444,103 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
   background: rgba(201,162,39,0.07); border: 1px solid rgba(201,162,39,0.18);
   font-size: 0.76rem; color: var(--gold); letter-spacing: 0.05em;
 }
+.qr-block {
+  margin-top: 24px; display: flex; align-items: center; gap: 14px;
+  padding: 12px 18px; border-radius: 16px;
+  background: rgba(201,162,39,0.04); border: 1px solid rgba(201,162,39,0.15);
+}
+.qr-img { width: 80px; height: 80px; border-radius: 8px; display: block; }
+.qr-label { font-size: 0.78rem; font-weight: 600; color: var(--gold); margin-bottom: 4px; }
+.qr-url { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.03em; }
+
+/* ── Achievement popup ── */
+.achievement-popup {
+  position: fixed; bottom: 30px; right: -320px;
+  width: 270px; padding: 14px 16px; border-radius: 14px;
+  background: rgba(8,10,20,0.95); border: 1px solid rgba(201,162,39,0.45);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 0 40px rgba(201,162,39,0.18), 0 8px 40px rgba(0,0,0,0.7);
+  z-index: 500; display: flex; gap: 14px; align-items: center;
+  transition: right 0.55s cubic-bezier(0.34,1.56,0.64,1);
+}
+.achievement-popup.show { right: 28px; }
+.ach-icon {
+  width: 50px; height: 50px; border-radius: 11px; flex-shrink: 0;
+  background: linear-gradient(135deg, #c9a227, #f59e0b);
+  display: flex; align-items: center; justify-content: center; font-size: 1.7rem;
+  box-shadow: 0 0 18px rgba(201,162,39,0.5);
+}
+.ach-body { flex: 1; }
+.ach-label { font-size: 0.62rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; margin-bottom: 3px; }
+.ach-name { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 2px; line-height: 1.3; }
+.ach-xp { font-size: 0.72rem; color: var(--green); font-weight: 600; }
+.ach-bar { height: 2px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.ach-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #f59e0b); width: 0; transition: width 3.5s linear; }
+
+/* ── Konami overlay ── */
+#konami-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(7,9,15,0.97);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+  opacity: 0; pointer-events: none; transition: opacity 0.4s ease; overflow: hidden;
+}
+#konami-overlay.show { opacity: 1; pointer-events: all; }
+.konami-skull {
+  width: 220px; height: 220px; object-fit: cover; border-radius: 20px;
+  position: relative; z-index: 2;
+  box-shadow: 0 0 60px rgba(201,162,39,0.5), 0 0 120px rgba(201,162,39,0.2);
+  transform: scale(0); opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease;
+}
+#konami-overlay.show .konami-skull {
+  transform: scale(1); opacity: 1;
+}
+.konami-title {
+  font-family: 'Cinzel', serif; font-size: clamp(2rem,5vw,3.5rem); font-weight: 900;
+  color: var(--gold); letter-spacing: 0.1em; text-align: center;
+  text-shadow: 0 0 40px rgba(201,162,39,0.8), 0 0 100px rgba(201,162,39,0.3);
+  position: relative; z-index: 2;
+}
+.konami-sub { font-size: 1rem; color: var(--muted); letter-spacing: 0.06em; position: relative; z-index: 2; }
+.konami-secret {
+  margin-top: 8px; padding: 10px 28px; border-radius: 100px;
+  background: rgba(201,162,39,0.1); border: 1px solid rgba(201,162,39,0.35);
+  font-size: 0.92rem; color: var(--gold); letter-spacing: 0.03em;
+  position: relative; z-index: 2;
+}
+.konami-code {
+  font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
+  color: var(--gold); letter-spacing: 0.15em;
+  padding: 12px 32px; border-radius: 12px;
+  background: rgba(201,162,39,0.08); border: 1px solid rgba(201,162,39,0.4);
+  box-shadow: 0 0 20px rgba(201,162,39,0.2);
+  position: relative; z-index: 2; margin-top: 4px;
+}
+.konami-remaining {
+  font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em;
+  position: relative; z-index: 2;
+}
+.konami-close {
+  position: absolute; bottom: 24px; font-size: 0.7rem;
+  color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+  z-index: 2;
+}
+.konami-coin {
+  position: absolute; pointer-events: none; z-index: 1;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f5c842, #c9a227, #7a5c00);
+  box-shadow: 0 0 6px rgba(201,162,39,0.8);
+  animation: coinFall linear forwards;
+}
+@keyframes coinFall {
+  0%   { transform: translateY(-60px) scale(1); opacity: 1; }
+  100% { transform: translateY(110vh) scale(0.6); opacity: 0.1; }
+}
+@keyframes kskull {
+  0%   { transform: rotate(-30deg) scale(0.2); opacity: 0; }
+  70%  { transform: rotate(8deg) scale(1.2); opacity: 1; }
+  100% { transform: rotate(0deg) scale(1); opacity: 1; }
+}
 
 /* ── Revenue (optional) slide ── same slide-product layout */
 .slide-revenue .section-title { color: var(--purple); }
@@ -451,6 +555,26 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 <body>
 
 <canvas id="bg-canvas"></canvas>
+
+<div id="konami-overlay">
+  <img class="konami-skull" src="art/treasure.png" alt="Treasure">
+  <div class="konami-title">YOU FOUND THE TREASURE</div>
+  <div class="konami-sub">Ye be a true Pirate Developer</div>
+  <div class="konami-secret">🎁 Lifetime Pro access — your exclusive code:</div>
+  <div class="konami-code" id="konami-code">BLACKBEARD-PRO</div>
+  <div class="konami-remaining" id="konami-remaining">9 treasures remaining</div>
+  <div class="konami-close">click anywhere to close</div>
+</div>
+
+<div class="achievement-popup" id="ach-popup">
+  <div class="ach-icon">🏆</div>
+  <div class="ach-body">
+    <div class="ach-label">Trophy Unlocked</div>
+    <div class="ach-name">First Solana Program</div>
+    <div class="ach-xp">+50 XP</div>
+    <div class="ach-bar"><div class="ach-bar-fill" id="ach-bar-fill"></div></div>
+  </div>
+</div>
 
 <nav id="nav-dots">
   <div class="dot" onclick="goTo(0)" title="Intro"></div>
@@ -476,13 +600,14 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 
   <img class="hero-map reveal" src="art/map.png" alt="Pirate Academy Map">
   <h1 class="headline reveal d1">PIRATE ACADEMY</h1>
-  <p class="hero-tagline reveal d2">Learn Solana Development the Fun Way</p>
+  <p class="hero-tagline reveal d2">Chart Your Course Through the Solana Seas</p>
   <p class="hero-sub reveal d3">Write code · Mint proof · Ship dapps</p>
 
   <div class="pills reveal d4">
     <span class="pill g">⚓ Rust &amp; Anchor</span>
     <span class="pill c">🔗 On-chain Proof</span>
     <span class="pill p">🎮 Gamified Progress</span>
+    <span class="pill g">🤖 <span class="ai-glow">AI</span> Captain</span>
   </div>
 
   <p class="scroll-hint">↓ scroll to explore</p>
@@ -509,28 +634,28 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
       <div class="p-card">
         <span class="x">✗</span>
         <div>
-          <h4>Documentation walls</h4>
+          <h4>Shipwrecked in Docs</h4>
           <p>Dense text, zero context, no feedback loop — devs feel lost within hours</p>
         </div>
       </div>
       <div class="p-card">
         <span class="x">✗</span>
         <div>
-          <h4>Passive learning</h4>
+          <h4>Watching From the Dock</h4>
           <p>Watch → copy → paste → forget. No real understanding, no retention</p>
         </div>
       </div>
       <div class="p-card">
         <span class="x">✗</span>
         <div>
-          <h4>No proof of progress</h4>
+          <h4>No Treasure to Show</h4>
           <p>No checkpoints, no achievements, nothing to show employers or DAOs</p>
         </div>
       </div>
       <div class="p-card">
         <span class="x">✗</span>
         <div>
-          <h4>Massive skill gap</h4>
+          <h4>Shore to Ship Abyss</h4>
           <p>Giant jump from Hello World to a real dapp — most devs never make it across</p>
         </div>
       </div>
@@ -555,7 +680,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
           <th>Gamified</th>
           <th>Solana-Native</th>
           <th>Wallet Connect</th>
-          <th>Free to Start</th>
+          <th>AI Onboarding</th>
         </tr>
       </thead>
       <tbody>
@@ -575,7 +700,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
           <td><span class="cx">✗</span></td>
           <td><span class="cx">✗</span></td>
           <td><span class="cx">✗</span></td>
-          <td><span class="ck">✓</span></td>
+          <td><span class="cx">✗</span></td>
         </tr>
         <tr>
           <td>RiseIn</td>
@@ -584,7 +709,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
           <td><span class="cp">~</span></td>
           <td><span class="ck">✓</span></td>
           <td><span class="cx">✗</span></td>
-          <td><span class="cp">~</span></td>
+          <td><span class="cx">✗</span></td>
         </tr>
         <tr>
           <td>Solana Cookbook</td>
@@ -593,7 +718,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
           <td><span class="cx">✗</span></td>
           <td><span class="ck">✓</span></td>
           <td><span class="cx">✗</span></td>
-          <td><span class="ck">✓</span></td>
+          <td><span class="cx">✗</span></td>
         </tr>
         <tr>
           <td>YouTube / Udemy</td>
@@ -602,12 +727,12 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
           <td><span class="cx">✗</span></td>
           <td><span class="cx">✗</span></td>
           <td><span class="cx">✗</span></td>
-          <td><span class="cp">~</span></td>
+          <td><span class="cx">✗</span></td>
         </tr>
       </tbody>
     </table>
   </div>
-  <p class="comp-note reveal d3">⚓ Pirate Academy is the only platform where you learn Solana by doing — and prove it on-chain.</p>
+  <p class="comp-note reveal d3">⚓ All others make you watch from the dock. We make you sail — and prove it on-chain.</p>
 </section>
 
 
@@ -657,6 +782,13 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
           <p>Finish a course → mint a Metaplex Core NFT as verifiable proof of completion</p>
         </div>
       </div>
+      <div class="feat" style="border-color:rgba(201,162,39,0.25);background:rgba(201,162,39,0.04);">
+        <div class="feat-icon g">🤖</div>
+        <div>
+          <h4><span class="ai-glow">AI</span> Onboarding</h4>
+          <p>5 questions → personalized learning path, powered by LLM. Your <span class="ai-glow">AI</span> Captain charts the route before you sail.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -673,6 +805,11 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
       <div class="j-circle">🦊</div>
       <h4>Connect Wallet</h4>
       <p>Phantom, Backpack or Solflare — 30 seconds to start</p>
+    </div>
+    <div class="j-step">
+      <div class="j-circle" style="border-color:var(--gold);background:rgba(201,162,39,0.12);box-shadow:0 0 22px rgba(201,162,39,0.35);">🤖</div>
+      <h4><span class="ai-glow">AI</span> Charts Your Path</h4>
+      <p>Answer 5 questions. Your <span class="ai-glow">AI</span> Captain personalizes the route.</p>
     </div>
     <div class="j-step">
       <div class="j-circle">🗺️</div>
@@ -697,7 +834,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
   </div>
 
   <div class="persona reveal d3">
-    <p><span class="name">Alex, a Python dev</span>, knew nothing about Solana on Monday. By Friday he'd minted his first on-chain NFT badge — and understood every line of code that made it happen.</p>
+    <p><span class="name">Vitalik, an Ethereum developer</span>, decided it was finally time to learn Rust. By Friday he'd shipped his first Solana program and minted an on-chain badge — without reading a single doc page.</p>
   </div>
 </section>
 
@@ -735,7 +872,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
     <p class="live-url">course-eight-plum.vercel.app</p>
 
     <div class="traction-tech" style="margin-top:16px;">
-      <span class="tech-tag">Next.js 16</span>
+      <span class="tech-tag">Next.js 15</span>
       <span class="tech-tag">Anchor</span>
       <span class="tech-tag">Metaplex Core</span>
       <span class="tech-tag">Monaco Editor</span>
@@ -744,7 +881,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
     </div>
 
     <p class="hackathon-note" style="margin-top:14px;">
-      🏆 Solana Frontier Hackathon · Consumer Track · Deadline May 11, 2026
+      🏆 Colosseum Hackathon · Consumer / Education Track
     </p>
   </div>
 </section>
@@ -765,12 +902,12 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
     <div class="wn-card glass">
       <div class="icon">🏛️</div>
       <h4>Foundation funds education</h4>
-      <p>Solana Foundation actively funds education projects. We have a live product, real users, and a clear roadmap — exactly what grant programs reward.</p>
+      <p>Solana Foundation actively grants <span class="hl">$10k–$50k</span> to education projects. A freeCodeCamp Solana course already received one. We're more interactive, more engaging, better.</p>
     </div>
-    <div class="wn-card glass">
+    <div class="wn-card glass" style="border-color:rgba(201,162,39,0.25);background:rgba(201,162,39,0.04);">
       <div class="icon">🤖</div>
-      <h4>AI made solo shipping real</h4>
-      <p>Modern AI tooling means <span class="hl">one developer</span> can ship what used to take a team of five — in two weeks instead of six months.</p>
+      <h4><span class="ai-glow">AI</span>-driven learning is NOW</h4>
+      <p>Stack Overflow is dying. Watching tutorials is dying. The world is shifting to <span class="hl">adaptive, generative learning</span> — and we're building exactly that, for Solana.</p>
     </div>
   </div>
 </section>
@@ -783,18 +920,18 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
   <p class="subtitle reveal d1">And I'm building what I wish had existed when I started.</p>
 
   <div class="founder-wrap glass reveal d2">
-    <img class="avatar" src="art/founder.jpg" alt="Alex Pylypenko">
+    <img class="avatar" src="art/founder.jpg" alt="Alex" style="object-position: center top;">
 
     <div class="founder-info">
-      <h3>Alex Pylypenko</h3>
-      <p class="founder-role">Founder · Solana Developer · Builder</p>
+      <h3>Alex</h3>
+      <p class="founder-role">Founder · Full Stack Developer · Web3 Automation Engineer</p>
 
       <ul class="creds">
         <li>In crypto since <strong>2022</strong> — retrodrops, Web3 sales, deep ecosystem intuition</li>
-        <li>Python developer at <strong>peanut.trade</strong> for 1.5 years — shipping real Web3 product used by real users</li>
+        <li><span>Full Stack developer at <strong>peanut.trade</strong> for 1.5 years — shipping real Web3 product used by real users</span></li>
         <li><strong>Ethereum hackathon prize winner</strong> — proven ability to build &amp; ship under pressure</li>
         <li>Web3 automation specialist since 2024 — complex bots, pipelines, on-chain scripts</li>
-        <li>AI power-user: <strong>Claude Code CLI, Codex CLI</strong> — ships full apps solo, end-to-end</li>
+        <li><span class="ai-glow">AI</span> power-user: <strong>Claude Code CLI, Codex CLI</strong> — ships full apps solo, end-to-end</li>
       </ul>
 
       <blockquote class="f-quote">
@@ -815,7 +952,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
     <div class="r-phase">
       <div class="r-dot q2">🏴‍☠️</div>
       <div class="r-label q2">Q2 2026</div>
-      <h4>Launch</h4>
+      <h4>Set Sail</h4>
       <ul class="r-items">
         <li>Colosseum submission</li>
         <li>Foundation grant apply</li>
@@ -826,18 +963,18 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
     <div class="r-phase">
       <div class="r-dot q3">⚡</div>
       <div class="r-label q3">Q3 2026</div>
-      <h4>Grow</h4>
+      <h4>Expand the Fleet</h4>
       <ul class="r-items">
         <li>Island 3: DeFi protocols</li>
-        <li>Freemium model live</li>
-        <li>AI Captain tutor</li>
+        <li><span class="ai-glow">AI</span> Tutor subscription</li>
+        <li>Talent Marketplace beta</li>
         <li>First paying users</li>
       </ul>
     </div>
     <div class="r-phase">
       <div class="r-dot q4">🏛️</div>
       <div class="r-label q4">Q4 2026</div>
-      <h4>Scale</h4>
+      <h4>Plunder the Market</h4>
       <ul class="r-items">
         <li>Island 4: Token Extensions</li>
         <li>B2B bootcamp pilots</li>
@@ -848,12 +985,13 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
     <div class="r-phase">
       <div class="r-dot y27">🌊</div>
       <div class="r-label y27">2027</div>
-      <h4>Expand</h4>
+      <h4>Rule the Seas</h4>
       <ul class="r-items">
         <li>Mobile app</li>
         <li>Community leaderboard</li>
         <li>Multi-chain support</li>
         <li>Enterprise licensing</li>
+        <li><span class="ai-glow">AI</span>-native dev curriculum</li>
       </ul>
     </div>
   </div>
@@ -864,20 +1002,20 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 <section class="slide slide-revenue" id="slide-9">
   <span class="slide-label">Business Model</span>
   <h2 class="section-title reveal">Three revenue streams, zero vendor lock-in</h2>
-  <p class="subtitle reveal d1">Start with grants · grow through subscriptions · scale via B2B</p>
+  <p class="subtitle reveal d1">Subscription for learners · marketplace for companies · licenses for bootcamps</p>
 
   <div class="rev-grid reveal d2">
     <div class="rev-card glass" style="border:1px solid rgba(201,162,39,0.18);">
-      <div class="icon">🏛️</div>
-      <h4>Foundation Grants</h4>
-      <p>Solana Foundation actively funds education. We apply immediately post-hackathon with a live product and real users.</p>
-      <div class="price" style="color:var(--gold);">$10k–$50k</div>
+      <div class="icon">🤖</div>
+      <h4><span class="ai-glow">AI</span> Tutor Subscription</h4>
+      <p>First island free. <span class="ai-glow">AI</span> Captain — personalized explanations, live code review, adaptive hints — unlocks with subscription.</p>
+      <div class="price" style="color:var(--gold);">$19 / month</div>
     </div>
     <div class="rev-card glass" style="border:1px solid rgba(167,139,250,0.18);">
-      <div class="icon">🔓</div>
-      <h4>Freemium Subscription</h4>
-      <p>Islands 1–2 free forever. Advanced islands (DeFi, Token Extensions, real mainnet txs) behind a subscription.</p>
-      <div class="price" style="color:var(--purple);">$9 / month</div>
+      <div class="icon">🏅</div>
+      <h4>Talent Marketplace</h4>
+      <p>On-chain badges = verifiable skill proof. Companies pay to search and hire from our pool of verified Solana developers.</p>
+      <div class="price" style="color:var(--purple);">$200–500 / month</div>
     </div>
     <div class="rev-card glass" style="border:1px solid rgba(34,211,238,0.18);">
       <div class="icon">🏢</div>
@@ -904,12 +1042,19 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 
   <div class="end-links reveal d3">
     <a href="https://course-eight-plum.vercel.app" class="end-link primary" target="_blank">⚓ Try the Demo</a>
-    <a href="https://github.com/Xelagate/pirate-academy" class="end-link secondary" target="_blank">⭐ GitHub</a>
     <a href="mailto:Alex.enrout.invest@gmail.com" class="end-link secondary">📨 Get in Touch</a>
   </div>
 
   <div class="colosseum-tag reveal d4">
-    🏆 Solana Frontier Hackathon · Consumer Track · May 2026
+    🏆 Colosseum Hackathon · Consumer / Education Track
+  </div>
+
+  <div class="qr-block reveal d5">
+    <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fcourse-eight-plum.vercel.app%2Fpitch.html&bgcolor=07090f&color=c9a227&format=png&margin=4" alt="QR">
+    <div class="qr-text">
+      <div class="qr-label">🏴‍☠️ Interactive Pitch Deck</div>
+      <div class="qr-url">course-eight-plum.vercel.app/pitch.html</div>
+    </div>
   </div>
 </section>
 
@@ -982,6 +1127,97 @@ const obs = new IntersectionObserver(
   { threshold: 0.12 }
 );
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── Traction counters ── */
+function animateCount(el, target, suffix, duration) {
+  const start = performance.now();
+  (function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(eased * target) + suffix;
+    if (p < 1) requestAnimationFrame(update);
+  })(start);
+}
+
+let countersStarted = false;
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !countersStarted) {
+      countersStarted = true;
+      const tn = document.querySelectorAll('#slide-5 .tn');
+      animateCount(tn[0], 12,  '',  1200);
+      animateCount(tn[1], 2,   '',  800);
+      animateCount(tn[2], 21,  '',  1400);
+      animateCount(tn[3], 100, '%', 1600);
+    }
+  });
+}, { threshold: 0.5 }).observe(document.getElementById('slide-5'));
+
+/* ── Konami code ── */
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+const PROMO_CODES = [
+  'BLACKBEARD-PRO','JOLLY-ROGER-PRO','DAVY-JONES-PRO','SPARROW-PRO',
+  'SILVER-PRO','KRAKEN-PRO','CORSAIR-PRO','BUCCANEER-PRO','ANCHOR-PRO','TREASURE-PRO'
+];
+let ki = 0, codeIdx = 0;
+
+window.addEventListener('keydown', e => {
+  ki = (e.key === KONAMI[ki]) ? ki + 1 : (e.key === KONAMI[0] ? 1 : 0);
+  if (ki === KONAMI.length) {
+    ki = 0;
+    const ov = document.getElementById('konami-overlay');
+    const codeEl = document.getElementById('konami-code');
+    const remEl = document.getElementById('konami-remaining');
+
+    if (codeIdx < PROMO_CODES.length) {
+      codeEl.textContent = PROMO_CODES[codeIdx];
+      const left = PROMO_CODES.length - codeIdx - 1;
+      remEl.textContent = left > 0 ? left + ' treasures remaining' : '🏴‍☠️ Last treasure claimed!';
+      codeIdx++;
+    } else {
+      codeEl.textContent = '🏴‍☠️ All treasures claimed';
+      remEl.textContent = 'The crew is full';
+    }
+
+    ov.classList.add('show');
+    for (let i = 0; i < 30; i++) {
+      setTimeout(() => {
+        const coin = document.createElement('div');
+        coin.className = 'konami-coin';
+        const size = (8 + Math.random() * 10) + 'px';
+        coin.style.left = (Math.random() * 100) + '%';
+        coin.style.top = '-20px';
+        coin.style.width = size;
+        coin.style.height = size;
+        coin.style.animationDuration = (1.8 + Math.random() * 2) + 's';
+        ov.appendChild(coin);
+        setTimeout(() => coin.remove(), 4500);
+      }, i * 100);
+    }
+    const closeKonami = () => { ov.classList.remove('show'); ov.removeEventListener('click', closeKonami); };
+    ov.addEventListener('click', closeKonami);
+  }
+}, { capture: false });
+
+/* ── Achievement popup ── */
+const achPopup = document.getElementById('ach-popup');
+const achBarFill = document.getElementById('ach-bar-fill');
+let achShown = false;
+
+const achObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !achShown) {
+      achShown = true;
+      setTimeout(() => {
+        achPopup.classList.add('show');
+        setTimeout(() => { achBarFill.style.width = '100%'; }, 50);
+        setTimeout(() => { achPopup.classList.remove('show'); }, 4200);
+      }, 1200);
+    }
+  });
+}, { threshold: 0.5 });
+
+achObs.observe(document.getElementById('slide-4'));
 </script>
 </body>
 </html>
