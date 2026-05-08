@@ -1221,47 +1221,7 @@ if (!isRecording) {
   achObs.observe(document.getElementById('slide-4'));
 }
 
-// Auto-advance mode
-const SLIDE_DURATIONS = [8,11,8,16,7,8,10,2,2,2,13];
-let autoStarted = false;
-
-function scrollToSlide(i) {
-  const el = document.getElementById(`slide-${i}`);
-  if (el) document.documentElement.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-}
-
-async function runAutoAdvance() {
-  if (autoStarted) return;
-  autoStarted = true;
-  const cd = document.getElementById('auto-countdown');
-  for (let n = 3; n >= 1; n--) {
-    cd.textContent = n;
-    cd.classList.add('show');
-    await new Promise(r => setTimeout(r, 900));
-    cd.classList.remove('show');
-    await new Promise(r => setTimeout(r, 100));
-  }
-  for (let i = 0; i < SLIDE_DURATIONS.length; i++) {
-    scrollToSlide(i);
-    await new Promise(r => setTimeout(r, SLIDE_DURATIONS[i] * 1000));
-  }
-}
-
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space' && !autoStarted) { e.preventDefault(); runAutoAdvance(); }
-});
 </script>
-
-<div id="auto-countdown" style="
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.5);
-  z-index: 9999; font-family: 'Pirata One', cursive; font-size: 160px;
-  color: #c9a227; text-shadow: 0 0 60px rgba(201,162,39,0.8);
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-"></div>
-<style>
-  #auto-countdown.show { opacity: 1; transform: translate(-50%,-50%) scale(1); }
-</style>
 
 </body>
 </html>
