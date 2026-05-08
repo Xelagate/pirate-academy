@@ -123,14 +123,12 @@ export function HeroSection() {
           >
             {ctaLabel}
           </a>
-          {!isReturning && (
-            <a
-              href="/onboard"
-              className="text-sm text-slate-500 hover:text-amber-400 transition-colors underline underline-offset-4"
-            >
-              Not sure where to start? Let AI chart your course →
-            </a>
-          )}
+          <a
+            href="/onboard"
+            className="text-sm text-slate-500 hover:text-amber-400 transition-colors underline underline-offset-4"
+          >
+            Not sure where to start? Let AI chart your course →
+          </a>
         </div>
 
         {hasStarted && next && (
