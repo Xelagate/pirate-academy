@@ -111,17 +111,27 @@ export function HeroSection() {
           Mint your proof on Solana devnet.
         </p>
 
-        <a
-          href={ctaHref}
-          className={[
-            "inline-block px-10 py-4 rounded-2xl font-black text-lg transition-all",
-            isReturning
-              ? "bg-sky-500 text-white hover:bg-sky-400 shadow-[0_0_40px_rgba(56,189,248,0.4)]"
-              : "bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_40px_rgba(245,158,11,0.5)] animate-pulse",
-          ].join(" ")}
-        >
-          {ctaLabel}
-        </a>
+        <div className="flex flex-col items-center gap-3">
+          <a
+            href={ctaHref}
+            className={[
+              "inline-block px-10 py-4 rounded-2xl font-black text-lg transition-all",
+              isReturning
+                ? "bg-sky-500 text-white hover:bg-sky-400 shadow-[0_0_40px_rgba(56,189,248,0.4)]"
+                : "bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_40px_rgba(245,158,11,0.5)] animate-pulse",
+            ].join(" ")}
+          >
+            {ctaLabel}
+          </a>
+          {!isReturning && (
+            <a
+              href="/onboard"
+              className="text-sm text-slate-500 hover:text-amber-400 transition-colors underline underline-offset-4"
+            >
+              Not sure where to start? Let AI chart your course →
+            </a>
+          )}
+        </div>
 
         {hasStarted && next && (
           <p className="mt-3 text-sm text-slate-600">
