@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Teleprompter</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: #000;
+    color: #fff;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    height: 100dvh;
+    touch-action: none;
+  }
+
+  #scroll-container {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  #text {
+    padding: 14vh 12vw 85vh;
+    line-height: 2;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 0.03em;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  .line {
+    display: block;
+    padding: 2px 0;
+    color: #555;
+    transition: color 0.2s;
+  }
+
+  .line.active { color: #fff; }
+  .line.cue {
+    color: #f59e0b;
+    font-size: 18px;
+    font-weight: normal;
+    letter-spacing: 0.02em;
+  }
+
+  .spacer { display: block; height: 32px; }
+
+  /* Fades */
+  #fade-top {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 12vh;
+    background: linear-gradient(to bottom, #000 30%, transparent);
+    pointer-events: none;
+    z-index: 5;
+  }
+  #fade-bottom {
+    position: fixed;
+    bottom: 70px; left: 0; right: 0;
+    height: 45vh;
+    background: linear-gradient(to top, #000 50%, transparent);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* Crosshair */
+  #crosshair {
+    position: fixed;
+    top: 14vh;
+    left: 0; right: 0;
+    height: 2px;
+    background: rgba(153, 69, 255, 0.3);
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  /* Controls */
+  #controls {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.9);
+    border-top: 1px solid #1a1a1a;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 10;
+    gap: 12px;
+  }
+
+  #btn-play {
+    background: #9945FF;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #btn-reset {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #aaa;
+    font-size: 18px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .speed-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .speed-label {
+    color: #555;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  input[type=range] {
+    width: 100%;
+    accent-color: #9945FF;
+    height: 4px;
+  }
+
+  #progress {
+    color: #444;
+    font-size: 13px;
+    min-width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Fullscreen hint */
+  #hint {
+    position: fixed;
+    top: 20px;
+    right: 16px;
+    z-index: 10;
+  }
+  #btn-fs {
+    background: none;
+    border: 1px solid #333;
+    color: #444;
+    font-size: 16px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div id="fade-top"></div>
+<div id="fade-bottom"></div>
+<div id="crosshair"></div>
+
+<div id="hint">
+  <button id="btn-fs" onclick="toggleFS()">⛶</button>
+</div>
+
+<div id="scroll-container">
+  <div id="text">
+
+    <span class="line cue">→ СЛАЙД 0 — HERO</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">AHOY, LANDLUBBERS!</span>
+    <span class="line">I'M CAPTAIN ALEX —</span>
+    <span class="line">FOUNDER OF PIRATE ACADEMY.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">WE TEACH SOLANA DEVELOPMENT.</span>
+    <span class="line">WITH PIRATES.</span>
+    <span class="line">BECAUSE — WHY NOT.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">→ СЛАЙД 1 — PROBLEM</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">LEARNING SOLANA IS HARD.</span>
+    <span class="line">THE DOCS ARE CONFUSING.</span>
+    <span class="line">THE TUTORIALS ARE BORING.</span>
+    <span class="line">MOST DEVELOPERS JUST GIVE UP</span>
+    <span class="line">BEFORE THEY SHIP ANYTHING.</span>
+    <span class="line">WE CHECKED — IT'S NOT THEM.</span>
+    <span class="line">IT'S THE LEARNING PATH.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">→ СЛАЙД 2 — COMPETITORS</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">THERE ARE PLATFORMS</span>
+    <span class="line">THAT TEACH BLOCKCHAIN.</span>
+    <span class="line">THERE ARE PLATFORMS FOR SOLANA.</span>
+    <span class="line">BUT NOBODY DOES BOTH —</span>
+    <span class="line">INTERACTIVE, GAMIFIED,</span>
+    <span class="line">WITH ON-CHAIN PROOF.</span>
+    <span class="line">WE LOOKED. TRUST US — WE LOOKED.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">→ СЛАЙД 3 — PRODUCT</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">SO WE BUILT PIRATE ACADEMY.</span>
+    <span class="line">YOU CONNECT YOUR WALLET.</span>
+    <span class="line">YOUR AI CAPTAIN</span>
+    <span class="line">BUILDS YOUR LEARNING PATH.</span>
+    <span class="line">YOU PICK AN ISLAND.</span>
+    <span class="line">YOU WRITE REAL CODE —</span>
+    <span class="line">IN THE BROWSER.</span>
+    <span class="line">NO LOCAL SETUP.</span>
+    <span class="line">NO CONFIG FILES.</span>
+    <span class="line">NO CRYING AT 2AM.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">→ СЛАЙД 4 — USE CASE</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">YOU GET INSTANT FEEDBACK.</span>
+    <span class="line">WHEN YOU FINISH —</span>
+    <span class="line">YOU MINT A REAL NFT BADGE.</span>
+    <span class="line">ON-CHAIN. IN YOUR WALLET.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">→ СЛАЙД 5 — TRACTION</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">RIGHT NOW —</span>
+    <span class="line">TWO ISLANDS.</span>
+    <span class="line">TWELVE LESSONS.</span>
+    <span class="line">ALL LIVE.</span>
+    <span class="line">BUILT IN THREE WEEKS.</span>
+    <span class="line">AND IT WORKS.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">→ СЛАЙД 6 — ПРОПУСТИТИ</span>
+    <span class="line cue">→ СЛАЙД 7 — TEAM</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">WE HAVE NOT A BIG TEAM.</span>
+    <span class="line">ACTUALLY — IT'S JUST ME.</span>
+    <span class="line">YOU CAN CHECK ME HERE</span>
+    <span class="line">IF YOU WANT.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line cue">→ СЛАЙД 8 — ПРОПУСТИТИ</span>
+    <span class="line cue">→ СЛАЙД 9 — ПРОПУСТИТИ</span>
+    <span class="line cue">→ СЛАЙД 10 — END</span>
+
+    <span class="spacer"></span>
+    <span class="spacer"></span>
+
+    <span class="line">THE GOAL IS SIMPLE:</span>
+    <span class="line">TAKE A DEVELOPER FROM ZERO</span>
+    <span class="line">TO THEIR FIRST</span>
+    <span class="line">ON-CHAIN TRANSACTION —</span>
+    <span class="line">IN ONE SESSION.</span>
+    <span class="line">NOT ONE MONTH.</span>
+    <span class="line">ONE SESSION.</span>
+
+    <span class="spacer"></span>
+
+    <span class="line">THE BEST DEVELOPERS</span>
+    <span class="line">DON'T JUST READ ABOUT SOLANA.</span>
+    <span class="line">THEY SAIL IT.</span>
+
+  </div>
+</div>
+
+<div id="controls">
+  <button id="btn-reset" onclick="reset()">↺</button>
+  <div class="speed-wrap">
+    <span class="speed-label">SPEED <span id="speed-val">1.0×</span></span>
+    <input type="range" id="speed" min="0.2" max="6" step="0.1" value="1">
+  </div>
+  <button id="btn-play" onclick="togglePlay()">▶</button>
+  <span id="progress">0%</span>
+</div>
+
+<script>
+  const container = document.getElementById('scroll-container');
+  const text = document.getElementById('text');
+  const lines = document.querySelectorAll('.line');
+  const speedInput = document.getElementById('speed');
+  const speedVal = document.getElementById('speed-val');
+  const progressEl = document.getElementById('progress');
+  const btnPlay = document.getElementById('btn-play');
+
+  let scrollY = 0;
+  let playing = false;
+  let raf = null;
+  const BASE_SPEED = 0.5;
+
+  function getSpeed() { return parseFloat(speedInput.value); }
+
+  speedInput.addEventListener('input', () => {
+    speedVal.textContent = getSpeed().toFixed(1) + '×';
+  });
+
+  function step() {
+    if (!playing) return;
+    scrollY += BASE_SPEED * getSpeed();
+    const maxScroll = text.offsetHeight - window.innerHeight;
+    if (scrollY >= maxScroll) {
+      scrollY = maxScroll;
+      playing = false;
+      btnPlay.textContent = '▶';
+      btnPlay.style.background = '#9945FF';
+    }
+    container.scrollTop = scrollY;
+    updateHighlight();
+    progressEl.textContent = maxScroll > 0 ? Math.round((scrollY / maxScroll) * 100) + '%' : '0%';
+    raf = requestAnimationFrame(step);
+  }
+
+  function updateHighlight() {
+    const topY = container.scrollTop + window.innerHeight * 0.14;
+    let closest = null, closestDist = Infinity;
+    lines.forEach(line => {
+      const rect = line.getBoundingClientRect();
+      const absTop = rect.top + container.scrollTop;
+      const dist = Math.abs(absTop + rect.height / 2 - topY);
+      if (dist < closestDist) { closestDist = dist; closest = line; }
+    });
+    lines.forEach(l => { l.classList.remove('active'); });
+    if (closest) closest.classList.add('active');
+  }
+
+  function togglePlay() {
+    playing = !playing;
+    if (playing) {
+      btnPlay.textContent = '⏸';
+      btnPlay.style.background = '#666';
+      raf = requestAnimationFrame(step);
+    } else {
+      btnPlay.textContent = '▶';
+      btnPlay.style.background = '#9945FF';
+      cancelAnimationFrame(raf);
+    }
+  }
+
+  function reset() {
+    playing = false;
+    cancelAnimationFrame(raf);
+    scrollY = 0;
+    container.scrollTop = 0;
+    btnPlay.textContent = '▶';
+    btnPlay.style.background = '#9945FF';
+    progressEl.textContent = '0%';
+    lines.forEach(l => l.classList.remove('active'));
+  }
+
+  function toggleFS() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+
+  // Tap anywhere on text area to toggle play
+  container.addEventListener('click', togglePlay);
+
+  // Keyboard (if connected)
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+    if (e.code === 'KeyR') reset();
+  });
+</script>
+</body>
+</html>

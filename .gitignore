@@ -96,6 +96,7 @@ pitch.html
 pitch-script.md
 teleprompter.html
 teleprompter-mobile.html
+!public/teleprompter-mobile.html
 video/
 docs/cto-review-transcript.md
 .vercelignore
