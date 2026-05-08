@@ -46,3 +46,56 @@ next-env.d.ts
 
 # solana local validator
 test-ledger/
+
+# ai tool configs (all local, not needed in repo)
+.superpowers/
+.agents/
+.adal/
+.claude/
+.augment/
+.codebuddy/
+.commandcode/
+.continue/
+.cortex/
+.crush/
+.factory/
+.goose/
+.iflow/
+.junie/
+.kilocode/
+.kiro/
+.kode/
+.mcpjam/
+.mux/
+.neovate/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.roo/
+.trae/
+.vibe/
+.windsurf/
+.zencoder/
+skills-lock.json
+
+# internal planning docs
+docs/superpowers/
+
+# local screenshots
+screens/
+
+# internal documents
+public/cto.html
+public/notes.html
+pitch.html
+pitch-script.md
+teleprompter.html
+teleprompter-mobile.html
+video/
+docs/cto-review-transcript.md
+.vercelignore
+
+# ai tool symlinks
+skills/
