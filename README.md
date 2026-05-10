@@ -12,7 +12,7 @@ Built for the **Solana Frontier Hackathon 2026**.
 - In-browser code editor with real-time validation
 - Progress saved locally — pick up where you left off
 - On-chain badge minted via Anchor program when you complete the course
-- AI tutor for personalized help (coming soon)
+- AI Captain onboarding — personalized learning path via Groq API (LLaMA 3.3 70B)
 
 ## Tech Stack
 
@@ -23,6 +23,7 @@ Built for the **Solana Frontier Hackathon 2026**.
 | Solana Client | `@solana/kit`, wallet-standard |
 | On-chain Program | Anchor (Rust), deployed on devnet |
 | Program Client | Codama-generated, type-safe |
+| AI | Groq API (LLaMA 3.3 70B) — personalized onboarding |
 
 ## On-chain Program
 
