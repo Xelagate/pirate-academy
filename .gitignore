@@ -87,6 +87,13 @@ docs/superpowers/
 # local screenshots
 screens/
 
+# internal tracking and dev tools
+PROGRESS.md
+demo-seed.html
+docs/backlog.md
+teleprompter-demo.html
+!public/teleprompter-demo.html
+
 # internal documents
 public/cto.html
 public/notes.html
